@@ -6,6 +6,7 @@
 
 \setlength\parindent{0pt}
 
+\usepackage{enumitem}
 \usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{amsmath}
@@ -59,7 +60,8 @@ Applying our assumptions,
     0 + 0 + 0 + 0 + 0 &= 0 + \mu \left(\frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial v_\theta}{\partial r}\right) + 0 + 0 + 0 - \frac{v_\theta}{r^2}\right) + 0 \\
     \frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial v_\theta}{\partial r}\right) - \frac{v_\theta}{r^2} &= 0 \\
     \frac{\partial^2 v_\theta}{\partial r^2} + \frac{1}{r} \frac{\partial v_\theta}{\partial r} - \frac{v_\theta}{r^2} &= 0 \\
-    v_\theta (r) &= c_1 r + \frac{c_2}{r} \left[\textrm{Euler-Cauchy Equation}\right]
+    r^2 \frac{\partial^2 v_\theta}{\partial r^2} + r \frac{\partial v_\theta}{\partial r} - v_\theta &= 0\hspace{8pt}\left[\textrm{Euler-Cauchy Equation}\right] \\
+    v_\theta (r) &= c_1 r + \frac{c_2}{r} 
 \end{align*}
 Rewriting our boundary conditions:
 \begin{enumerate}
@@ -75,5 +77,47 @@ Therefore, we got that
 \begin{equation*}
     v_\theta (r) = \frac{\Omega R^2}{r}
 \end{equation*}
-    
+
+\break
+
+\textbf{Question 2}. Two immiscible liquids of equal thickness $h$ are being sheared between a fixed and a moving plate, as in figure below. Gravity is neglected and there is no variation with $x$. Find an expression for:
+\begin{enumerate}[label=\arabic*)]
+    \item the velocity at the interface.
+    \item the shear stress in each fluid.
+\end{enumerate}
+Assume steady laminar flow.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{Problem2.jpg}
+    \caption{Illustration of Problem 2}
+    \label{fig:figprob2}
+\end{figure}
+
+\break
+
+\textbf{Question 3}. In the laminar flow a fluid in a circular pipe, the velocity profile is exactly a parabola. The rate of discharge is then represented by volume of a paraboloid. Prove that for this case the ratio of the maximum velocity to mean velocity is 2.
+
+\break
+
+\textbf{Question 4}. A circular pipe of radius $a$ and length $L$ is attached to a smoothly rounded outlet of a liquid reservoir by means of flanges and bolts as shown in figure below. At the flange section the velocity is uniform over the cross-section with magnitude $V_0$. At the outlet, which discharges into the atmosphere, the velocity profile is parabolic because of the friction in the pipe. What force must be supplied by the bolts to hold the pipe in place?
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{Problem4.jpg}
+    \caption{Illustration of Problem 4}
+    \label{fig:figprob4}
+\end{figure}
+
+\break
+
+\textbf{Question 5}. A slipper (slider) and plates (guide), both 0.5 m wide constitutes a bearing as shown in figure below. Density of the fluid, $\rho = 9.00\ \textrm{kg/}\textrm{m}^3$ and viscosity, $\mu = 0.1\ \textrm{Ns/}\textrm{m}^2$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{Problem5.jpg}
+    \caption{Illustration of Problem 5}
+    \label{fig:figprob5}
+\end{figure}
+
 \end{document}
