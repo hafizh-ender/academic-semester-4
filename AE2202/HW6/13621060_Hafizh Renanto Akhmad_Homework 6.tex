@@ -1,8 +1,11 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 
 % Packages
-\usepackage[a4paper, margin=1cm]{geometry}
-\usepackage{graphicx}
+\usepackage[a4paper,
+            left=0.5in,
+            right=0.5in,
+            top=0.5in,
+            bottom=1in]{geometry}\usepackage{graphicx}
 
 \setlength\parindent{0pt}
 
@@ -19,6 +22,8 @@
 
 \usepackage{subcaption}
 \usepackage{graphicx}
+
+\usepackage{setspace} 
 
 \usepackage{physics}
 
@@ -45,9 +50,7 @@
 
 \textbf{\underline{Answer}}
 
-Based on the description, the fluid surrounding the cylinder is viscous and incompressible and we only consider steady-sate condition. To simplify even further, we will assume (1) the fluid only move in the direction of $\theta$ and (2) uniform pressure distribution. We also have our boundary condition to be (1) the relative velocity of the fluid at the surface of the cylinder with respect the surfce is zero and (2) the velocity of the fluid far from the surface is zero.
-
-We have our governing equation of Navier-Stokes Theorem:
+Based on the description, the fluid surrounding the cylinder is viscous and incompressible and we only consider steady-sate condition. To simplify even further, we will assume (1) the fluid only move in the direction of $\theta$ and (2) uniform pressure distribution. We also have our boundary condition to be (1) the relative velocity of the fluid at the surface of the cylinder with respect the surfce is zero and (2) the velocity of the fluid far from the surface is zero. We have our governing equation of Navier-Stokes Theorem:
 \begin{equation}
     \rho \frac{d \mathbf{v}}{dt} = -\mathbf{\nabla}p + \mu \nabla^2 \mathbf{v} + \rho \mathbf{g}
 \end{equation}
@@ -65,7 +68,7 @@ Applying our assumptions,
 \end{align*}
 Rewriting our boundary conditions:
 \begin{enumerate}
-    \item $(v_\theta (R))_{\textrm{rel}} = 0 \Rightarrow (v_\theta (R)) = \Omega R$
+    \item $(v_\theta (R))_{\textrm{rel}} = 0 \Rightarrow v_\theta (R) = \Omega R$
     \item $\lim_{r \rightarrow \infty} (v_\theta (r)) = 0$
 \end{enumerate}
 For that BC 2. is valid, $c_1$ must be zero to ensure $v_\theta (r)$ not diverging to invinity when $r \rightarrow 0$. Thus,
@@ -81,7 +84,7 @@ Therefore, we got that
 \break
 
 \textbf{Question 2}. Two immiscible liquids of equal thickness $h$ are being sheared between a fixed and a moving plate, as in figure below. Gravity is neglected and there is no variation with $x$. Find an expression for:
-\begin{enumerate}[label=\arabic*)]
+\begin{enumerate}[label=\arabic*), noitemsep, nosep]
     \item the velocity at the interface.
     \item the shear stress in each fluid.
 \end{enumerate}
@@ -89,14 +92,22 @@ Assume steady laminar flow.
 
 \begin{figure}[h]
     \centering
-    \includegraphics{Problem2.jpg}
+    \includegraphics[scale=0.83]{Problem2.jpg}
     \caption{Illustration of Problem 2}
     \label{fig:figprob2}
 \end{figure}
 
+\textbf{\underline{Answer}}
+
+Hai
+
 \break
 
 \textbf{Question 3}. In the laminar flow a fluid in a circular pipe, the velocity profile is exactly a parabola. The rate of discharge is then represented by volume of a paraboloid. Prove that for this case the ratio of the maximum velocity to mean velocity is 2.
+
+\hfill
+
+\textbf{\underline{Answer}}
 
 \break
 
@@ -104,10 +115,12 @@ Assume steady laminar flow.
 
 \begin{figure}[h]
     \centering
-    \includegraphics{Problem4.jpg}
+    \includegraphics[scale=0.83]{Problem4.jpg}
     \caption{Illustration of Problem 4}
     \label{fig:figprob4}
 \end{figure}
+
+\textbf{\underline{Answer}}
 
 \break
 
@@ -115,9 +128,11 @@ Assume steady laminar flow.
 
 \begin{figure}[h]
     \centering
-    \includegraphics{Problem5.jpg}
+    \includegraphics[scale=0.83]{Problem5.jpg}
     \caption{Illustration of Problem 5}
     \label{fig:figprob5}
 \end{figure}
+
+\textbf{\underline{Answer}}
 
 \end{document}
