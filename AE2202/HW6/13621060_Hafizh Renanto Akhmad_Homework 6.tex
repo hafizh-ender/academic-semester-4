@@ -13,6 +13,7 @@
 \usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsfonts}
 
 \usepackage{tikz}
@@ -99,7 +100,68 @@ Assume steady laminar flow.
 
 \textbf{\underline{Answer}}
 
-Hai
+Assumptions:
+\begin{enumerate}[noitemsep, nosep]
+    \item Steady state
+    \item Laminar flow
+    \item Incompressible liquid
+    \item The fluids only move in the direction of $x$
+    \item Gravity is negligible
+    \item No variation of fluids in the $x$ direction
+    \item Uniform pressure accross $x$
+\end{enumerate}
+
+\hfill
+
+Governing Equation:
+\begin{enumerate}[noitemsep, nosep]
+    \item Navier-Stokes Theorem
+    
+    \begin{equation}
+        \rho \frac{d \mathbf{v}}{dt} = -\mathbf{\nabla}p + \mu \nabla^2 \mathbf{v} + \rho \mathbf{g}
+    \end{equation}
+
+    and in Cartesian coordinate system, in $x-$direction
+
+    \begin{equation}
+        \rho \left( \frac{\partial v_x}{\partial t} + v_x \frac{\partial v_x}{\partial x} + v_y \frac{\partial v_x}{\partial y} + v_z \frac{\partial v_x}{\partial z} \right) = -\frac{\partial p}{\partial x} + \mu \left(\frac{\partial^2 v_x}{\partial x^2} + \frac{\partial^2 v_x}{\partial y^2} + \frac{\partial^2 v_x}{\partial z^2} \right) + \rho g_x
+    \end{equation}
+\end{enumerate}
+
+\hfill
+
+Analysis: \\
+Using (4) with our assumptions, for one liquid:
+\begin{align*}
+    \rho(0 + 0 + 0 + 0) &= -0 + \mu(0 + \frac{\partial^2 v_x}{\partial y^2} + 0) + 0 \\
+    \frac{\partial^2 v_x}{\partial y^2} &= 0 \\
+    \frac{\partial v_x}{\partial y} &= c_1 \\
+    v_x(y) &= c_1 y + c_2
+\end{align*}
+
+As we can see here, the distribution of fluid is linear, buth should have different slope for different fluid. Our boundary conditions are:
+\begin{enumerate}
+    \item At $y = 0$, liquid 1 doesn't move with respect to the lower surface $\rightarrow v_x(0) = 0$.
+    \item At $y = h$ or at the interface, both liquid should move at the same rate (interface velocity, $v_x(h) = v_i$), and occurs a certain value of shear stress $\tau_1 (y = h) = \tau_2(y = h)$.
+    \item At $y = 2h$, liquid 2 doesn't move with respect to the upper surface $\rightarrow v_x(2h) = V$.
+\end{enumerate}
+
+Therefore, we got that
+\begin{align*}
+    \tau_1 (y = h) &= \tau_2 (y = h) \\
+    \mu_1 \frac{\partial (v_x)_1}{\partial y} &= \mu_2 \frac{\partial (v_x)_2}{\partial y} \\
+    \mu_1 \frac{v_i - 0}{h - 0} &= \mu_2 \frac{V - v_i}{2h - h} \\
+    \mu_1 v_i &= \mu_2 (V - v_i) \\
+    v_i &= \frac{\mu_2}{\mu_1 + \mu_2} V
+\end{align*}
+
+From the derivation, we can see that the shear stress is actually a constant. Thus, the shear stress is same all over both liquid. We may find an expression of the shear stress with
+\begin{align*}
+    \tau_1 = \tau_2 := \tau = \tau_1 (y = h) &= \mu_1 \frac{\partial (v_x)_1}{\partial y} \\
+    &= \mu_1 \frac{v_i}{h} \\
+    &= \mu_1 \cdot \frac{\mu_2}{\mu_1 + \mu_2} \frac{V}{h} \\
+    \tau &= \frac{\mu_1 \mu_2}{\mu_1 + \mu_2} \frac{V}{h}
+\end{align*}
 
 \break
 
@@ -108,6 +170,29 @@ Hai
 \hfill
 
 \textbf{\underline{Answer}}
+
+% ilustasi
+
+The velocity profile of the fluid should be a circular paraboloid with a maximum value of maximum velocity ($V_{\textrm{max}}$) at the middle ($r = 0$) and have zero velocity on the inside surface of the pipe ($r = R$), and thus independent of the which direction from the center of the pipe (independent of $\theta$). We may represent the paraboloid function of the velocity with
+\begin{equation}
+    v_z(r) = V_{\textrm{max}} \left[1 - \left(\frac{r}{R}\right)^2\right]
+\end{equation}
+The volume of the paraboloid may be calculated with
+\begin{align*}
+    \textrm{V} &= \int_0^{2\pi} \int_0^R v_z(r)\ r\ dr\ d\theta \\
+    &= 2\pi \int_0^R V_{\textrm{max}} \left[1 - \left(\frac{r}{R}\right)^2\right]r\ dr \\
+    &= 2\pi V_{\textrm{max}} \int_0^R \left[r - \frac{r^3}{R^2}\right] dr \\
+    &= 2\pi V_{\textrm{max}} \eval*{\frac{r^2}{2} - \frac{r^4}{4R^2}}_{0}^{R} \\
+    &= 2\pi V_{\textrm{max}} \left(\frac{R^2}{4}\right) \\
+    &= \frac{\pi R^2}{2} V_{\textrm{max}} \\
+    &= \frac{A}{2} V_{\textrm{max}}
+\end{align*}
+The mean velovity is calculated so that the product of the mean velocity and the area of the pipe is the same as the volume calculated above.
+\begin{align*}
+    V_{\textrm{mean}} A &= \textrm{V} \\
+    V_{\textrm{mean}} A &= \frac{A}{2} V_{\textrm{max}} \\
+    \therefore \frac{V_{\textrm{max}}}{V_{\textrm{mean}}} &= 2
+\end{align*}
 
 \break
 
