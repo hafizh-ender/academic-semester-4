@@ -16,6 +16,7 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 
+\usepackage{esint}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
@@ -116,13 +117,11 @@ Assumptions:
 Governing Equation:
 \begin{enumerate}[noitemsep, nosep]
     \item Navier-Stokes Theorem
-    
     \begin{equation}
         \rho \frac{d \mathbf{v}}{dt} = -\mathbf{\nabla}p + \mu \nabla^2 \mathbf{v} + \rho \mathbf{g}
     \end{equation}
 
     and in Cartesian coordinate system, in $x-$direction
-
     \begin{equation}
         \rho \left( \frac{\partial v_x}{\partial t} + v_x \frac{\partial v_x}{\partial x} + v_y \frac{\partial v_x}{\partial y} + v_z \frac{\partial v_x}{\partial z} \right) = -\frac{\partial p}{\partial x} + \mu \left(\frac{\partial^2 v_x}{\partial x^2} + \frac{\partial^2 v_x}{\partial y^2} + \frac{\partial^2 v_x}{\partial z^2} \right) + \rho g_x
     \end{equation}
@@ -207,6 +206,72 @@ The mean velovity is calculated so that the product of the mean velocity and the
 
 \textbf{\underline{Answer}}
 
+Assumptions:
+\begin{enumerate}[noitemsep, nosep]
+    \item Incompressible fluid
+    \item Steady state flow
+\end{enumerate}
+
+\hfill
+
+Governing Equation:
+\begin{enumerate}[noitemsep, nosep]
+    \item Conservation of Mass
+    \begin{equation}
+        \frac{d m_{CV}}{dt} = -\oiint_{A_{CV}} \rho\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA
+    \end{equation}
+
+    \item Navier-Stokes Equation
+    \begin{equation}
+        \rho\left(\frac{\partial \mathbf{v}}{\partial t} + \left(\mathbf{v} \cdot \nabla\right) \mathbf{v}\right) = -\nabla p + \mu \nabla^2 \mathbf{v} + \rho\mathbf{g}
+    \end{equation}
+
+    For cylindrical coordinates at $z$,
+    \begin{equation}
+        \rho\left(\frac{\partial v_z}{\partial t} + v_r \frac{\partial v_z}{\partial r} + \frac{v_\theta}{r} \frac{\partial v_z}{\partial \theta} + v_z \frac{\partial v_z}{\partial z}\right) = -\frac{\partial p}{\partial z} + \mu \left(\frac{1}{r} \frac{\partial}{\partial r} \left(r \frac{\partial v_z}{\partial r}\right) + \frac{1}{r^2} \frac{\partial^2 v_z}{\partial \theta^2} + \frac{\partial^2 v_z}{\partial z^2}\right) + \rho g_z
+    \end{equation}
+
+    \item Conservation of Linear Momentum
+    \begin{equation}
+        \frac{d \mathbf{p}_{CV}}{dt} = F_{\textrm{body}} + F_{p} + F_{\textrm{viscous}} -\oiint_{A_{CV}} \rho \mathbf{v}\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA
+    \end{equation}
+\end{enumerate}
+
+\hfill
+
+Analysis:
+
+Using (6), as the velocity profile is parabolic,
+\begin{align*}
+    0 &= -\iint_{A_{1}} \rho\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA +\iint_{A_{2}} \rho\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA \\
+    \iint_{A_{1}} \left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA &= \iint_{A_{2}} \left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA \\
+    V_0 \left(\pi a^2\right) &= \int_{0}^{a} V_e (r) \left(2\pi r\right) dr  \\
+    \frac{1}{2} V_0 a^2 &= \int_{0}^{a} V_{\textrm{max}} \left[1 - \left(\frac{r}{a}\right)^2\right] r\ dr \\
+    \frac{1}{2} V_0 a^2 &= \frac{V_{\textrm{max}}}{2} \left(\frac{a^2}{2}\right) \\
+    V_{\textrm{max}} &= 2V_0
+\end{align*}
+
+Using (8) and our assumptions,
+\begin{align*}
+    \rho\left(0 + 0 + 0 + 0 + v_z \frac{\partial v_z}{\partial z}\right) &= -\frac{\partial p}{\partial z} + \mu \left(\frac{1}{r} \frac{\partial}{\partial r} \left(r \frac{\partial v_z}{\partial r}\right) + 0 + \frac{\partial^2 v_z}{\partial z^2}\right) + 0 \\
+    \rho v_z \frac{\partial v_z}{\partial z} &= -\frac{\partial p}{\partial z} + \mu \frac{1}{r} \frac{\partial}{\partial r} \left(r \frac{\partial v_z}{\partial r}\right) + \mu \frac{\partial^2 v_z}{\partial z^2}
+\end{align*}
+The resulting partial differential equation is quite complex, so let's not use that :)
+
+Using (9), we get that
+\begin{align*}
+    \frac{d \mathbf{p}_{CV}}{dt} + \mathbf{F} &= 0 \\
+    (-F)\mathbf{\hat{i}} &= -\frac{d \mathbf{p}_{CV}}{dt} \\
+    F &= F_{\textrm{body}} + F_{p} + F_{\textrm{viscous}} -\iint_{A_{1}} \rho \mathbf{v}\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA -\iint_{A_{2}} \rho \mathbf{v}\left(\mathbf{v}_r \cdot \mathbf{\hat{n}}\right) dA \\
+    F &= 0 - p_1 \left(\pi a^2\right) + p_2 \left(\pi a^2\right) + F_{\textrm{viscous}} - \rho {V_0}^2 \left(\pi a^2\right) + \rho \int_0^a \left(2V_0 \left[1 - \left(\frac{r}{a}\right)^2\right]\right)^2 2\pi r\ dr \\
+    F &= \left(p_2 - p_1\right) \left(\pi a^2\right) + F_{\textrm{viscous}} - \rho {V_0}^2 \left(\pi a^2\right) + 8\rho {V_0}^2 \pi\int_0^a \left(\left[1 - \left(\frac{r}{a}\right)^2\right]\right)^2 r\ dr \\
+    F &= \left(p_2 - p_1\right) a^2 + F_{\textrm{viscous}} - \rho {V_0}^2 a^2 + 8\rho {V_0}^2 \int_0^a \left(r - 2 \frac{r^3}{a^2} + \frac{r^5}{a^4}\right) dr \\
+    F &= \left(p_2 - p_1\right) a^2 + F_{\textrm{viscous}} - \rho {V_0}^2 a^2 + 8\rho {V_0}^2 \left(\frac{a^2}{2} - 2 \frac{a^4}{4a^2} + \frac{a^6}{6a^4}\right) \\
+    F &= \left(p_2 - p_1\right) a^2 + F_{\textrm{viscous}} - \rho {V_0}^2 a^2 + 8\rho {V_0}^2 \cdot \frac{a^2}{6} \\
+    F &= \left(p_2 - p_1\right) a^2 + F_{\textrm{viscous}} + \frac{1}{3} \rho {V_0}^2 a^2
+\end{align*}
+Here, we have to know the viscous force distribution to determine the actual force $F$, as friction exists on the pipe wall.
+
 \break
 
 \textbf{Question 5}. A slipper (slider) and plates (guide), both 0.5 m wide constitutes a bearing as shown in figure below. Density of the fluid, $\rho = 9.00\ \textrm{kg/}\textrm{m}^3$ and viscosity, $\mu = 0.1\ \textrm{Ns/}\textrm{m}^2$.
@@ -218,6 +283,69 @@ The mean velovity is calculated so that the product of the mean velocity and the
     \label{fig:figprob5}
 \end{figure}
 
+Find out the
+\begin{enumerate}[noitemsep, nosep]
+    \item load carrying capacity of the bearing
+    \item drag
+    \item power lost in the bearing 
+\end{enumerate}
+
+\hfill
+
 \textbf{\underline{Answer}}
+
+Assumptions:
+\begin{enumerate}[noitemsep, nosep]
+    \item Incompressible fluid
+    \item Steady state flow
+\end{enumerate}
+
+\hfill
+
+Governing Equation:
+\begin{enumerate}[noitemsep, nosep]
+    \item Navier-Stokes Equation
+    \begin{equation}
+        \rho \frac{d \mathbf{v}}{dt} = -\mathbf{\nabla}p + \mu \nabla^2 \mathbf{v} + \rho \mathbf{g}
+    \end{equation}
+
+    and in Cartesian coordinate system, in $x-$direction
+    \begin{equation}
+        \rho \left( \frac{\partial v_x}{\partial t} + v_x \frac{\partial v_x}{\partial x} + v_y \frac{\partial v_x}{\partial y} + v_z \frac{\partial v_x}{\partial z} \right) = -\frac{\partial p}{\partial x} + \mu \left(\frac{\partial^2 v_x}{\partial x^2} + \frac{\partial^2 v_x}{\partial y^2} + \frac{\partial^2 v_x}{\partial z^2} \right) + \rho g_x
+    \end{equation}
+\end{enumerate}
+
+\hfill
+
+Analysis:
+
+Using (11), as there is viscosity, we get that
+\begin{align*}
+    \rho \left( 0 + v_x \frac{\partial v_x}{\partial x} + 0 + 0 \right) = -\frac{\partial p}{\partial x} + \mu \left(\frac{\partial^2 v_x}{\partial x^2} + \frac{\partial^2 v_x}{\partial y^2} + 0 \right) + 0
+\end{align*}
+Here, we see that there exists $v_x$ gradient in $x-$direction. However, let's assume that value is small and neglect it. Then, we get that
+\begin{align*}
+    \frac{\partial p}{\partial x} &= \mu \frac{\partial^2 v_x}{\partial y^2} \\
+    v_x (y) &= \frac{1}{2\mu}\frac{\partial p}{\partial x} y^2 + c_1 y + c_2
+\end{align*}
+Using BCs of:
+\begin{enumerate}[noitemsep, nosep]
+    \item $v_x = 0$ at $y = 0$
+    \item $v_x = U$ at $y = h$
+\end{enumerate}
+we get that
+\begin{align*}
+    0 &= 0 + 0 + c_2 \\
+    c_2 &= 0 \\
+    U &= \frac{1}{2\mu}\frac{\partial p}{\partial x} h^2 + c_1 h \\
+    c_1 &= \frac{U}{h} - \frac{1}{2\mu}\frac{\partial p}{\partial x} h
+\end{align*}
+thus
+\begin{align*}
+    v_x (y) &= \frac{1}{2\mu}\frac{\partial p}{\partial x} y^2 + \left(\frac{U}{h} - \frac{1}{2\mu}\frac{\partial p}{\partial x} h\right) y \\
+    v_x (y) &= U\frac{y}{h} + \frac{1}{2\mu}\frac{\partial p}{\partial x}\left(y^2 - yh\right)
+\end{align*}
+
+
 
 \end{document}

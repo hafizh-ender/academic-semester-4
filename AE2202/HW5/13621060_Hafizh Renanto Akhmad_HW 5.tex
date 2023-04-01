@@ -4,15 +4,25 @@
 \usepackage[a4paper, margin=2.0cm]{geometry}
 \usepackage{graphicx}
 
+\usepackage{enumitem}
 \usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsfonts}
 
+\usepackage{esint}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \usepackage{pgfplotstable}
+
+\usepackage{subcaption}
+\usepackage{graphicx}
+
+\usepackage{setspace} 
+
+\usepackage{physics}
 
 % Title
 \title{AE2202 Fluid Dynamics - Homework 5}
@@ -42,7 +52,9 @@ For this case,
     y^2 - x &= C
 \end{align*}
 Sketch:
-
+\begin{center}
+    \includegraphics[scale=1.2]{Answer1.jpg}
+\end{center}
 \newpage
 
 \section*{Problem 2}
@@ -88,7 +100,12 @@ For this case,
     |xy| &= K
 \end{align*}
 Sketch:
-On the other hand, the acceleration field may be found by differentiating the velocity field:
+
+\begin{center}
+    \includegraphics[scale=0.8]{Answer3.jpg}
+\end{center}
+
+\noindent On the other hand, the acceleration field may be found by differentiating the velocity field:
 \begin{align*}
     \mathbf{a} &= \frac{d\mathbf{v}}{dt} \\
     &= \frac{\partial\mathbf{v}}{\partial t} + \mathbf{v} \cdot \nabla \mathbf{v} \\
