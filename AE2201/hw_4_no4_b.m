@@ -24,6 +24,7 @@ n = length(b);
 % Inisialisasi array of x
 x = ones(n, 1);
 x_simpan = ones(n, 1);
+errors = ones(n, 1);
 
 % Inisialisasi jumlah iterasi dan batas iterasi
 iter = 0;
@@ -45,12 +46,17 @@ while(~finish)
     end
 
     iter = iter + 1;
+
+    for i = 1:n
+        errors(i) = (x_simpan(i) - x(i)) / x_simpan(i);
+    end
+
     x = x_simpan;
 
     if (iter >= stop_iter)
         finish = true;
     end
-
-    fprintf("Iterasi ke-%d:\n x = \n", iter);
-    disp(x);
 end
+
+x
+errors
