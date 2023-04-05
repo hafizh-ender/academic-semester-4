@@ -1,4 +1,4 @@
-% Baca matriks A
+% Baca matrix
 A = [ 10  -2  -1   2   3   1  -4   7;
        5  11   3  10  -3   3   3  -4;
        7  12   1   5   3 -12   2   3;
@@ -9,7 +9,6 @@ A = [ 10  -2  -1   2   3   1  -4   7;
       -1   3   4   1   3  -4   7   6
     ]
 
-% Baca matriks b
 b = [  0;
       12;
       -5;
@@ -20,25 +19,20 @@ b = [  0;
       -7;
     ]
 
-% Ambil panjang/dimensi dari b
 n = length(b)
 
-% Buat matriks augmented
+% Augmentasi matrix
 Ab = [A b];
 
-% Loop over all column (for pivot)
+% Mulai looping
 for i = 1:n
-    % Simpan bilanga di pivot
     pembagi = Ab(i, i);
-
-    % Simpan bilangan pengali
     pengali = zeros(n, 1);
 
     for k = 1:n
         pengali(k) = Ab(k, i);
     end
 
-    % Lakukan ERO pada matriks
     for j = i:(n+1)
         for k = 1:n
             if (k ~= i)
@@ -52,4 +46,5 @@ for i = 1:n
     end
 end
 
+% Lihat hasil akhir
 Ab
