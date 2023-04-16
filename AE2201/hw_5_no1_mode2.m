@@ -1,4 +1,5 @@
 % LU Decompisition: Choleski Program
+% by Hafizh Renanto Akhmad (13621060)
 
 % Define the matrices
 disp("Ax = b")

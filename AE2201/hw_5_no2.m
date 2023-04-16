@@ -1,4 +1,5 @@
 % Gauss Seidel Program
+% by Hafizh Renanto Akhmad (13621060)
 
 % Variable for the problem
 s = 0.8;
@@ -113,7 +114,7 @@ end
 result = true;
 
 for k = 1:n
-    if (matrix(k, k) < sum(k))
+    if (abs(matrix(k, k)) < abs(sum(k)))
         result = false;
     end
 end
