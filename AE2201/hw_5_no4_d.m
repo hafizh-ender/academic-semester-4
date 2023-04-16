@@ -39,30 +39,27 @@ end
 
 [eVals,X] = sortEigen(eVals,X); % Sort in ascending order.
 
-% eigenvalues = eVals(1:3)' % Extract 3 smallest
-% eigenvectors = X(:,1:3) % eigenvalues & vectors.
-
-eigenvalues = eVals'
-eigenvectors = X
+eigenvalues = eVals(1:3)' % Extract 3 smallest
+eigenvectors = X(:,1:3) % eigenvalues & vectors.
 
 n = length(eigenvectors);
 
 % Plot the 3 lowest eigenvalue
 x = 0:9;
-x_s = [];
+x_1 = zeros(1,10);
+x_2 = zeros(1,10);
+x_3 = zeros(1,10);
 
-for i = 1:n
-    x_s = [x_s (zeros(1, 10)];
+for i = 1:8
+    x_1(i+1) = X(i, 1);
 end
 
-% x_1 = zeros(1,10);
-% x_2 = zeros(1,10);
-% x_3 = zeros(1,10);
+for i = 1:8
+    x_2(i+1) = X(i, 2);
+end
 
-for i = 1:n
-    for j = 1:n
-        
-    end
+for i = 1:8
+    x_3(i+1) = X(i, 3);
 end
 
 clf
