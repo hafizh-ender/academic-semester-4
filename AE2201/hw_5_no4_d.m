@@ -39,34 +39,37 @@ end
 
 [eVals,X] = sortEigen(eVals,X); % Sort in ascending order.
 
-eigenvalues = eVals(1:3)' % Extract 3 smallest
-eigenvectors = X(:,1:3) % eigenvalues & vectors.
+% eigenvalues = eVals(1:3)' % Extract 3 smallest
+% eigenvectors = X(:,1:3) % eigenvalues & vectors.
+
+eigenvalues = eVals'
+eigenvectors = X
 
 n = length(eigenvectors);
 
 % Plot the 3 lowest eigenvalue
 x = 0:9;
-x_1 = zeros(1,10);
-x_2 = zeros(1,10);
-x_3 = zeros(1,10);
+x_s = [];
 
-for i = 1:8
-    x_1(i+1) = X(i, 1);
+for i = 1:n
+    x_s = [x_s (zeros(1, 10)];
 end
 
-for i = 1:8
-    x_2(i+1) = X(i, 2);
-end
+% x_1 = zeros(1,10);
+% x_2 = zeros(1,10);
+% x_3 = zeros(1,10);
 
-for i = 1:8
-    x_3(i+1) = X(i, 3);
+for i = 1:n
+    for j = 1:n
+        
+    end
 end
 
 clf
-u1 = plot(x, x_1);
+u1 = plot(x, x_1, "Marker","o");
 hold on
-u2 = plot(x, x_2);
-u3 = plot(x, x_3);
+u2 = plot(x, x_2, "Marker","square");
+u3 = plot(x, x_3, "Marker","diamond");
 grid on
 xlabel('x')
 ylabel('u')
