@@ -1,6 +1,7 @@
 %% Welcome Page
 printWelcome();
 
+
 %% Input the Equation
 printChangeSection();
 n = input("Insert number of equations: ");
@@ -20,7 +21,7 @@ end
 
 printChangeSection();
 
-printMiddle("Confirmation for System of Linear Equations", 75)
+printMiddle("Confirmation for System of Linear Equations", 80)
 printEquation([A b], n);
 %% Choose Solving Method
 printChangeSection();
@@ -69,9 +70,9 @@ end
 end
 
 function [A, b] = inputSemua(n)
-printMiddle("Input in form of matrix", 75)
-printMiddle("Use ';' to separate rows", 75)
-printMiddle("and ',' to separate columns", 75)
+printMiddle("Input in form of matrix", 80)
+printMiddle("Use ';' to separate rows", 80)
+printMiddle("and ',' to separate columns", 80)
 
 inputMatrix = input("", "s");
 
@@ -92,7 +93,7 @@ try
     A = dataNum(:,1:n);
     b = dataNum(:,n+1);
 catch
-    error("Invalid input. Masukkan sesuai banyak persamaan.")
+    error("Invalid input. Please assign according to inputted number of equations.")
 
     A = 0;
     b = 0;
@@ -327,8 +328,6 @@ if ~isDiagonallyDominant
     end
 end
 
-[A b]
-
 % Check again and give warning based on diagonally dominance
 isDiagonallyDominant = checkDiagonallyDominant(A, n);
 if ~isDiagonallyDominant
@@ -374,7 +373,7 @@ while(~done)
     end
 end
 
-xResult = x
+xResult = x;
 
 if ~(isnan(xResult) + isinf(xResult))
     strResult = "Result obtained";
@@ -383,7 +382,6 @@ else
     strResult = "Result not obtained";
     stateResult = false;
 end
-
 end
 
 function result = checkDiagonallyDominant(matrix, n)
@@ -414,7 +412,14 @@ end
 
 %% Formatting Procedures
 function printWelcome()
+fprintf("  __  __       _        _         ____      _            _       _             \n")
+fprintf(" |  \\/  | __ _| |_ _ __(_)_  __  / ___|__ _| | ___ _   _| | __ _| |_ ___  _ __ \n")
+fprintf(" | |\\/| |/ _` | __| '__| \\ \\/ / | |   / _` | |/ __| | | | |/ _` | __/ _ \\| '__|\n")
+fprintf(" | |  | | (_| | |_| |  | |>  <  | |__| (_| | | (__| |_| | | (_| | || (_) | |   \n")
+fprintf(" |_|  |_|\\__,_|\\__|_|  |_/_/\\_\\  \\____\\__,_|_|\\___|\\__,_|_|\\__,_|\\__\\___/|_|   \n")
 
+fprintf("\nby: Hafizh Renanto Akhmad\n")
+fprintf("      13621060\n")
 end
 
 function printMiddle(string, total)
@@ -528,7 +533,7 @@ end
 end
 
 function printChangeSection()
-for i=1:75
+for i=1:80
     fprintf(">")
 end
 fprintf("\n")
