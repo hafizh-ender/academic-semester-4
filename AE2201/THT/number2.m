@@ -1,7 +1,7 @@
 %% Problem 2 THT AE2201 2022/2023
 % by Hafizh Renanto Akhmad (13621060)
 
-clc, clf, clear
+clc, clear
 
 n = input("Input number of partition: ");
 et = 1.0e-15;
