@@ -1,41 +1,35 @@
 %% Welcome Page
-printWelcome();
+clc, clear
 
+printWelcome();
 
 %% Input the Equation
 printChangeSection();
 n = input("Insert number of equations: ");
 
+[A, b] = inputOverall(n);
+
+%% Confirmation
 printChangeSection();
-
-inputChoice = input(sprintf("Please input matrix insertion process: \n1: Row based\n2: All at one (only accepting decimals)\n\nChoice: "));
-
-printChangeSection();
-
-if (inputChoice == 1)
-    A = inputCoefficientPerLine(n);
-    b = inputConstantPerLine(n);
-else
-    [A, b] = inputSemua(n);
-end
-
-printChangeSection();
-
-printMiddle("Confirmation for System of Linear Equations", 80)
+printMiddle("Confirmation for System of Linear Equations", 75)
+fprintf("Number of Equations: %d\n", n)
 printEquation([A b], n);
+
 %% Choose Solving Method
 printChangeSection();
 
-methodChoice = input(sprintf("Please choose solving method:\n1. Gauss Elimination-Back Substitution\n2. Gauss-Seidel\n3. Gauss-Jordan Elimination\n\nPilihan: "));
+methodChoice = input(sprintf("Please choose solving method:\n1. Gauss Elimination-Back Substitution\n2. Gauss-Seidel\nBonus\n3. Gauss-Jordan Elimination\n\nPilihan: "));
 
 if (methodChoice == 1)
     [stateResult, strResult, xResult] = gaussElimination(A, b, n);
 elseif (methodChoice == 2)
     printChangeSection();
+
     imax = input("Please input maximum iteration: ");
     es = input("Please input minimum approximate error: ");
+    lambda = input("Please input relaxation constant (1 for no relaxation): ");
 
-    [stateResult, strResult, xResult] = gaussSeidel(A, b, n, imax, es);
+    [stateResult, strResult, xResult] = gaussSeidel(A, b, n, imax, es, lambda);
 else
     [stateResult, strResult, xResult] = gaussJordanElimination(A, b, n);
 end
@@ -48,15 +42,53 @@ if (stateResult)
     printResult(xResult, n)
 end
 
-%% Testing function
-
 %% Input Functions
-function [A] = inputCoefficientPerLine(n)
+function [A, b] = inputOverall(n)
+printChangeSection();
+
+inputChoice = input(sprintf("Please input matrix insertion process: \n1: Element based\n2: Row based (only accepting decimals)\n3: All at one (only accepting decimals)\n\nChoice: "));
+
+printChangeSection();
+
+if (inputChoice == 1)
+    A = inputCoefficientPerElement(n);
+    b = inputConstantPerLine(n);
+elseif (inputChoice == 2)
+    [A, b] = inputPersamaanPerLine(n);
+else
+    [A, b] = inputSemua(n);
+end
+end
+
+function [A] = inputCoefficientPerElement(n)
+% Initialize A
 A = zeros(n, n);
 
 for i = 1:n
+    % Get equation suffixes
+    if (mod(i, 10) == 1 && i ~= 11)
+        rowTh = "st";
+    elseif (mod(i, 10) == 2 && i ~= 12)
+        rowTh = "nd";
+    elseif (mod(i, 10) == 3 && i ~= 13)
+        rowTh = "rd";
+    else
+        rowTh = "th";
+    end
+
     for j = 1:n
-        A(i, j) = input(sprintf("Insert coefficient element %d for equation %d (a%d%d): ", j, i, i, j));
+        % Get coefficient suffixes
+        if (mod(j, 10) == 1 && j ~= 11)
+            colTh = "st";
+        elseif (mod(j, 10) == 2 && j ~= 12)
+            colTh = "nd";
+        elseif (mod(j, 10) == 3 && j ~= 13)
+            colTh = "rd";
+        else
+            colTh = "th";
+        end
+
+        A(i, j) = input(sprintf("Insert %d-%s coefficient for %d-%s equation (A(%d,%d)): ", j, colTh, i, rowTh, i, j));
     end
 end
 end
@@ -65,14 +97,50 @@ function [b] = inputConstantPerLine(n)
 b = zeros(n, 1);
 
 for i = 1:n
-    b(i) = input(sprintf("Insert constant for equation %d (b%d): ", i, i));
+    % Get equation suffixes
+    if (mod(i, 10) == 1 && i ~= 11)
+        rowTh = "st";
+    elseif (mod(i, 10) == 2 && i ~= 12)
+        rowTh = "nd";
+    elseif (mod(i, 10) == 3 && i ~= 13)
+        rowTh = "rd";
+    else
+        rowTh = "th";
+    end
+
+    b(i) = input(sprintf("Insert constants for %d-%s equation (b%d): ", i, rowTh, i));
+end
+end
+
+function [A, b] = inputPersamaanPerLine(n)
+A = zeros(n, n);
+b = zeros(n, 1);
+
+printMiddle("Input in form of array", 75)
+printMiddle("Use ',' to separate rows", 75)
+printMiddle("Press enter after one equation", 75)
+    
+for i = 1:n    
+    inputArray = input("", "s");
+    
+    try
+        dataBaris = string(split(inputArray, ","));
+
+        for j = 1:n
+            A(i, j) = dataBaris(j);
+        end
+
+        b(i) = dataBaris(n + 1);
+    catch
+        error("Invalid input. Please assign according to inputted number of equations.")
+    end
 end
 end
 
 function [A, b] = inputSemua(n)
-printMiddle("Input in form of matrix", 80)
-printMiddle("Use ';' to separate rows", 80)
-printMiddle("and ',' to separate columns", 80)
+printMiddle("Input in form of matrix", 75)
+printMiddle("Use ';' to separate rows", 75)
+printMiddle("and ',' to separate columns", 75)
 
 inputMatrix = input("", "s");
 
@@ -304,14 +372,24 @@ end
 end
 
 %% Gauss Seidel Functions
-function [stateResult, strResult, xResult] = gaussSeidel(A, b, n, iterLim, es)
+function [stateResult, strResult, xResult] = gaussSeidel(A, b, n, iterLim, es, lambda)
 % Check diagonally dominance of the matrix
 isDiagonallyDominant = checkDiagonallyDominant(A, n);
 % isDiagonallyDominant = true;
 
+% Ask the user to let the system do some row exchange or want to do it
+% themself, as the system is not perfect
+if ~isDiagonallyDominant
+    printChangeSection();
+    warning("The matrix is not diagonally dominant, potentially broke the algorithm")
+    rearrangeSelf = input(sprintf("Please choose your action:\n1: Input rearranged matrix\n2: Let the system rearrange (NOT STABLE)\nOther: Let it be\n\nChoice: "));
+else
+    rearrangeSelf = 0;
+end
+
 % Do some row exchange if not diagonally dominant
 % Limited only to 
-if ~isDiagonallyDominant
+if rearrangeSelf == 2
     % Check every diagonal element except last one
     for i = 1:(n-1)
         % Check below the diagonal element
@@ -320,28 +398,43 @@ if ~isDiagonallyDominant
             % larger than the abs value of current diagonal element and
             % value of element on our diagonal row but on that diagonal
             % column is not zero, do row swapping
-            if (abs(A(j, i)) > abs(A(i, i)) && A(i, j))
+            if (abs(A(j, i)) >= abs(A(i, i)) && A(i, j))
                 A = swapEro(A, n, i, j);
                 b = swapEro(b, 1, i, j);
             end
         end
     end
-end
 
-% Check again and give warning based on diagonally dominance
-isDiagonallyDominant = checkDiagonallyDominant(A, n);
-if ~isDiagonallyDominant
-    warning("The matrix is not diagonally dominant, potentially broke the algorithm")
+    % Check again and give warning based on diagonally dominance
+    printChangeSection();
+    printMiddle("Row Swapping Result", 75)
+    printEquation([A b], n);
+elseif rearrangeSelf == 1
+    [A, b] = inputOverall(n);
+    printChangeSection();
+    printMiddle("Rearranged Matrix", 75)
+    printEquation([A b], n);
 end
 
 % Initialize array of solution, a helping array, and array of errors
-x = ones(n, 1);
-xStore = ones(n, 1);
+x = zeros(n,1);
+xStore = zeros(n,1);
 xErrors = ones(n, 1);
 
 % Initialize iteration variable
 iter = 0;
 done = false;
+
+% Normalize row with diagona
+for i = 1:n
+    diagVal = A(i, i);
+
+    for j = 1:n
+        A(i, j) = A(i, j) / diagVal;
+    end
+
+    b(i) = b(i) / diagVal;
+end
 
 while(~done)
     % Do the iterative scheme
@@ -350,11 +443,13 @@ while(~done)
 
         for j = 1:n
             if (i ~= j)
-                sumAx = sumAx + A(i, j) * x(j);
+                sumAx = sumAx + A(i, j) * xStore(j);
             end
         end
 
-        xStore(i) = (1 / A(i, i)) * (b(i) - sumAx);
+        xStore(i) = b(i) - sumAx;
+
+        xStore(i) = xStore(i) * lambda + (1 - lambda) * x(i);
     end
 
     % Increment iteration
@@ -412,14 +507,19 @@ end
 
 %% Formatting Procedures
 function printWelcome()
-fprintf("  __  __       _        _         ____      _            _       _             \n")
-fprintf(" |  \\/  | __ _| |_ _ __(_)_  __  / ___|__ _| | ___ _   _| | __ _| |_ ___  _ __ \n")
-fprintf(" | |\\/| |/ _` | __| '__| \\ \\/ / | |   / _` | |/ __| | | | |/ _` | __/ _ \\| '__|\n")
-fprintf(" | |  | | (_| | |_| |  | |>  <  | |__| (_| | | (__| |_| | | (_| | || (_) | |   \n")
-fprintf(" |_|  |_|\\__,_|\\__|_|  |_/_/\\_\\  \\____\\__,_|_|\\___|\\__,_|_|\\__,_|\\__\\___/|_|   \n")
+fprintf("  ____        _       _               ____  _     _____ \n")
+fprintf(" / ___|  ___ | |_   _(_)_ __   __ _  / ___|| |   | ____|\n")
+fprintf(" \\___ \\ / _ \\| \\ \\ / / | '_ \\ / _` | \\___ \\| |   |  _|  \n")
+fprintf("  ___) | (_) | |\\ V /| | | | | (_| |  ___) | |___| |___ \n")
+fprintf(" |____/ \\___/|_| \\_/ |_|_| |_|\\__, | |____/|_____|_____|\n")
+fprintf("           _ _   _       __  _|___/   _        _        \n")
+fprintf(" __      _(_) |_| |__   |  \\/  | __ _| |_ _ __(_)_  __  \n")
+fprintf(" \\ \\ /\\ / / | __| '_ \\  | |\\/| |/ _` | __| '__| \\ \\/ /  \n")
+fprintf("  \\ V  V /| | |_| | | | | |  | | (_| | |_| |  | |>  <   \n")
+fprintf("   \\_/\\_/ |_|\\__|_| |_| |_|  |_|\\__,_|\\__|_|  |_/_/\\_\\  \n")
 
 fprintf("\nby: Hafizh Renanto Akhmad\n")
-fprintf("      13621060\n")
+fprintf("    13621060\n")
 end
 
 function printMiddle(string, total)
@@ -533,7 +633,7 @@ end
 end
 
 function printChangeSection()
-for i=1:80
+for i=1:75
     fprintf(">")
 end
 fprintf("\n")
