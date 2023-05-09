@@ -106,7 +106,7 @@ sum = zeros(n, 1);
 for i = 1:n
     for j = 1:n
         if (i ~= j)
-            sum(i) = sum(i) + matrix(i, j);
+            sum(i) = sum(i) + abs(matrix(i, j));
         end
     end
 end
@@ -114,7 +114,7 @@ end
 result = true;
 
 for k = 1:n
-    if (abs(matrix(k, k)) < abs(sum(k)))
+    if (abs(matrix(k, k)) < sum(k))
         result = false;
     end
 end

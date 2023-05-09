@@ -70,6 +70,7 @@ u3 = plot(x, x_3, "Marker","diamond");
 grid on
 xlabel('x')
 ylabel('u')
+ylim([-0.4 0.6])
 legend([["0.2431" "0.6897" "1.2913"]])
 hold off
 
