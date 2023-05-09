@@ -1,6 +1,10 @@
-%% Main Program
-n = 3;
-es = 1.0e-15;
+%% Problem 2 THT AE2201 2022/2023
+% by Hafizh Renanto Akhmad (13621060)
+
+clc, clf, clear
+
+n = input("Input number of partition: ");
+et = 1.0e-15;
 
 % Get the A and B matrix for propped cantilever beam problem of
 % Ax = lambda Bx
@@ -9,8 +13,11 @@ es = 1.0e-15;
 % Get standardize form Hz = lambda z 
 [H, T] = standardizeForm(A, B, n);
 
+% Display H
+H
+
 % Get eigenvalues and eigenvector from H
-[lambda, Z] = jacobi(H, n, es);
+[lambda, Z] = jacobi(H, n, et);
 
 % Get the X and normalize
 X = T * Z;
@@ -45,7 +52,7 @@ smallestLoadsAnalyticalCoeff = [20.19; 59.68; 118.9];
 errors = abs((smallestLoadsCoeff - smallestLoadsAnalyticalCoeff) ./ smallestLoadsAnalyticalCoeff);
 
 % Display the solution)
-fprintf("Your three smallest eigenvalues with its eigenvectors are\n\n")
+fprintf("Your three smallest eigenvalues with its eigenvectors, and the smallest buckling loads are\n\n")
 smallestEigenvalue = smallestLambda'
 smallestEigenvector = smallestX
 smallestLoadsCoeff
@@ -68,7 +75,6 @@ grid on
 plot(x,plotX(:,2),"Marker","square");
 plot(x,plotX(:,3),"Marker","diamond");
 xlim([0 n+1])
-ylim([-0.75 0.75])
 xlabel("Partition")
 ylabel("u")
 
@@ -200,7 +206,7 @@ for i = 1:n
 end
 end
 
-function [eigenvalues, eigenvectors] = jacobi(A, n, stopError)
+function [eigenvalues, eigenvectors] = jacobi(A, n, eTol)
 % Limit the number of rotations
 maxRot = 5 * (n^2);
 
@@ -211,7 +217,7 @@ P = eye(n);
 for i = 1:maxRot
     [maxEl, maxRow, maxCol] = maxElem(A, n);
 
-    if maxEl < stopError
+    if maxEl < eTol
         eigenvalues = diagonal(A, n);
         eigenvectors = P;
 
