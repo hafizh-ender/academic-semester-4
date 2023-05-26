@@ -10,8 +10,12 @@
 \setlength\LTleft{0pt} 
 
 \usepackage{lipsum}  
-\usepackage{svg}
+\usepackage[inkscapeformat=png]{svg}
 \usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{float}
 
 \title{Utilizing Statistical Learning Algorithm to Solve Problems in Aerospace Engineering}
 
@@ -30,9 +34,9 @@
 
 {\renewcommand\arraystretch{1.0}
 \noindent\begin{longtable*}{@{}l @{\quad=\quad} l@{}}
-    $M$ & Mach number\\
-    $V_f$ & Flutter speed\\
-    $DC$ & Damping coefficient
+    \texttt{M} & Mach number\\
+    \texttt{Vf} & Flutter speed\\
+    \texttt{DC} & Damping coefficient
 \end{longtable*}}
 
 \section{Introduction}
@@ -40,29 +44,22 @@
 
 \section{Statistical Learning}
 \subsection{Definition}
-Statistical learning referes to the set approaches or methods to estimate a function relating a set of inputs and a set of outputs based on a set of known datas. Suppose we have a set of inputs (or features) $X$ and a set of outputs (or responses) $Y$. There exists a fixed, unknown function $f$ representing the relationship between $X$ and $Y$ such that 
+Statistical learning referes to the set approaches or methods to estimate a function relating a set of inputs and a set of outputs based on a set of known datas. Suppose we have a set of inputs (or features) $X$ and a set of outputs (or responses) $Y$. There exists a fixed, unknown function \texttt{F} representing the relationship between $X$ and $Y$ such that 
 \begin{equation} \label{eq:statslearndef}
     Y = f(X) + \epsilon
 \end{equation}
-where $\epsilon$ is a random error term, which is independent of $X$ and has mean zero. $f$ represents the systematic information that $X$ provides about $Y$ [1]. Statistical learning is a set of approaches to estimate $f$ based on some given data.
+where $\epsilon$ is a random error term, which is independent of $X$ and has mean zero. \texttt{F} represents the systematic information that $X$ provides about $Y$ [1]. Statistical learning is a set of approaches to estimate \texttt{F} based on some given data.
 
-\subsection{Main Purpose}
-There are two main purposes in using statistical learning to estimate $f$: prediction and inference. Suppose we already have a set of inputs $X_k$ and its corresponding outputs $Y_k$. At some point, we may have a set of inputs $X_u$ but we do not have the corresponding outputs $Y_u$. This is where the need of prediction rises. We may use statistical learning to estimate $f$ using $X_k$ and $Y_k$ and using the results to predict $Y_u$. As $\epsilon$ averages to zero, we may have
-\begin{equation} \label{eq:statslearnpred}
-    \hat{Y} = \hat{f}(X)
-\end{equation}
-where $\hat{f}$ represents the estimate of $f$ and $\hat{Y}$ represents the prediction of $Y$. Here, we may say $\hat{f}$ is our model. On the other hand, we may wish to understand how $Y$ is affected by $X$ as $X$ changes. Here, we wish to estimate $f$ but not for the purpose of prediction. Using Statistical learning, we may infer the relationship between $X$ and $Y$ by estimating $f$ using $X_k$ and $Y_k$. Therefore, our main goal is to apply statistical learning to $X_k$ and $Y_k$, known as the training data, in order to estimate $f$, resulting in our model of $\hat{f}$. We may then use the resulting model to predict $Y_u$ or to infer the relationship between $X$ and $Y$.
-
-\subsection{Regression vs Classification}
-There are two types of problems in statistical learning: regression and classification. In regression problems, the response $Y$ is quantitative, while in classification problems, the response $Y$ is qualitative or categorical. In this report, we will utilize three basic statistical learning methods: linear regression for regression problems, logistic regression for classification problems, and K-Nearest Neighbors algorithm for both regression and classification problems, to solve some problem cases in aerospace engineering.
+\paragraph{Regression vs Classification}
+There are two types of problems in statistical learning: regression and classification. In regression problems, the response $Y$ is quantitative, while in classification problems, the response $Y$ is qualitative or categorical.
 
 \subsection{Linear Regression}
 \subsubsection{Definition}
-Linear regression is a very simple approach in statistical learning. It is classified as a parametric method, which means that it makes an assumption about the functional form, or shape, of $f$, and a supervised learning, which means that it uses a set of labeled datas, and is used for regression problems. Linear regression assumes that there exists a linear relationship between $X = (X_1, X_2, \dots, X_p)$ and $Y$, which means that $f$ can be expressed as
+Linear regression is a very simple approach in statistical learning. It is classified as a parametric method, which means that it makes an assumption about the functional form, or shape, of \texttt{F}, and a supervised learning, which means that it uses a set of labeled datas, and is used for regression problems. Linear regression assumes that there exists a linear relationship between $X = (X_1, X_2, \dots, X_p)$ and $Y$, which means that \texttt{F} can be expressed as
 \begin{equation} \label{eq:linmod}
     f(X) = \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_pX_p
 \end{equation}
-where $X_j$ represents the $j$th feature of $X$ and $\beta_j$ represents the $j$th coefficient of $f$. $\beta_j$ quantifies the relation between $X_j$ and $Y$, which can be interpreted as average effect on $Y$ of a one unit increase in $X_j$, holding other predictors fixed. The values of $\beta_j$ are unknown and must be estimated based on the training data. Suppose $\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_p$ are the estimates of $\beta_0, \beta_1, \dots, \beta_p$, respectively, we may have our estimate of $Y$ as
+where $X_j$ represents the $j$th feature of $X$ and $\beta_j$ represents the $j$th coefficient of \texttt{F}. $\beta_j$ quantifies the relation between $X_j$ and $Y$, which can be interpreted as average effect on $Y$ of a one unit increase in $X_j$, holding other predictors fixed. The values of $\beta_j$ are unknown and must be estimated based on the training data. Suppose $\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_p$ are the estimates of $\beta_0, \beta_1, \dots, \beta_p$, respectively, we may have our estimate of $Y$ as
 \begin{equation} \label{eq:linreg}
     \hat{Y} = \hat{\beta}_0 + \hat{\beta}_1X_1 + \hat{\beta}_2X_2 + ... + \hat{\beta}_pX_p
 \end{equation}
@@ -239,13 +236,29 @@ KNN predicts the output of a new data point by looking at the $k$ closest data p
 \begin{equation} \label{eq:eucliddist}
     d\left(\mathbf{x}_a, \mathbf{x}_b\right) = \sqrt{\sum_{i=1}^p \left(x_{ai} - x_{bi}\right)^2}
 \end{equation}
-where $p$ is the number of features. 
-For classification problems, the output of KNN is the mode of the $k$ closest data points. For regression problems, the output of KNN is the mean of the $k$ closest data points.
+where $p$ is the number of features. As we take the ``distance'' that is measured from the value difference for each feature, it is important to scale the features so that they have the same scale. Otherwise, the feature with the largest scale will dominate the distance metric.
+
+For this report, we will treat every $k$ neighbors uniformly. For classification problems, the output of KNN is the mode of the $k$ closest data points, that is,
+\begin{equation} \label{eq:knnclass}
+    \hat{y} = \textrm{mode}\left(y_1, y_2, \cdots, y_k\right)
+\end{equation}
+On the other hand, the output of KNN is the mean of the $k$ closest data points for regression problems, that is,
+\begin{equation} \label{eq:knnreg}
+    \hat{y} = \frac{1}{k} \sum_{i=1}^k y_i
+\end{equation}
+
 
 \subsubsection{Finding the Optimal Number of Neighbors}
-The number of neighbors, $k$, is a hyperparameter of the KNN algorithm. The optimal value of $k$ depends on the data. Therefore, to find the optimal value of $k$, we may iterate through different values of $k$ and choose the value of $k$ that gives the best performance. In this report, we will use $K$-fold cross validation algorithm to find the optimal value of $k$.
+The number of neighbors, $k$, is a hyperparameter of the KNN algorithm. The optimal value of $k$ depends on the data. Therefore, to find the optimal value of $k$, we may iterate through different values of $k$ and choose the value of $k$ that gives the best performance. In this report, we will use $K$-fold cross-validation algorithm to find the optimal value of $k$.
 
-The $K$-fold cross validation works by dividing the training data into $K$ folds. Then, for each value of $k$, we train the model using $K-1$ folds and test the model using the remaining fold. We repeat this process $K$ times, each time using a different fold as the test set. The average performance of the model is then computed. The value of $k$ that gives the best performance is chosen as the optimal value of $k$. The metrics use for evaluating the performance of the model depends on the problem. All of the metrics used in this report will be discussed in the next section.
+The $K$-fold cross-validation works by dividing the training data into $K$ folds. Then, for each value of $k$, we train the model using $K-1$ folds and test the model using the remaining fold. We repeat this process $K$ times, each time using a different fold as the test set. The average performance of the model is then computed. The value of $k$ that gives the best performance is chosen as the optimal value of $k$. The metrics use for evaluating the performance of the model depends on the problem. All of the metrics used in this report will be discussed in the next section.
+
+\subsection{Correlation Coefficient}
+The correlation coefficient is a measure of the linear relationship between two variables. The most common correlation coefficient is the Pearson correlation coefficient, which is defined as
+\begin{equation} \label{eq:pearsoncorr}
+    r_{XY} = \frac{\sum_{i=1}^n \left(X_i - \bar{X}\right)\left(Y_i - \bar{Y}\right)}{\sqrt{\sum_{i=1}^n \left(X_i - \bar{X}\right)^2 \sum_{i=1}^n \left(Y_i - \bar{Y}\right)^2}}
+\end{equation}
+where $X_i$ and $Y_i$ are the $i$-th data points of $X$ and $Y$, respectively, $\bar{X}$ and $\bar{Y}$ are the mean of $X$ and $Y$, respectively, and $n$ is the number of data points. The Pearson correlation coefficient is bounded between $-1$ and $1$. A value of $-1$ indicates a perfect negative linear relationship, while a value of $1$ indicates a perfect positive linear relationship. A value of $0$ indicates no linear relationship.
 
 \subsection{Model Accuracy Metrics}
 \subsubsection{Regression Problem}
@@ -259,7 +272,7 @@ where $n_\textrm{test}$ is the number of data points in the test set, $y_i$ is t
 \end{equation}
 
 \subsubsection{Classification Problem}
-For classification problems, we will use the accuracy, precision, recall, and F1 score as the accuracy metrics.
+For classification problems, we will use the accuracy, precision, recall, and F1-score as the accuracy metrics.
 \begin{enumerate}
 \item \textit{Accuracy} is the most intuitive metric and it is simply a ratio of correctly predicted observation to the total observations. It is defined as
 \begin{equation} \label{eq:accuracy}
@@ -275,28 +288,289 @@ Precision is a good metric to use when the cost of false positives is high.
     \textrm{Recall} = \frac{\textrm{True Positives}}{\textrm{True Positives} + \textrm{False Negatives}}
 \end{equation}
 Recall is a good metric to use when the cost of false negatives is high.
-\item \textit{F1 score} is the weighted average of precision and recall. Therefore, this metric takes both false positives and false negatives into account. It is defined as
+\item \textit{F1-score} is the weighted average of precision and recall. Therefore, this metric takes both false positives and false negatives into account. It is defined as
 \begin{equation} \label{eq:f1score}
-    \textrm{F1 Score} = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}}
+    \textrm{F1-score} = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}}
 \end{equation}
-F1 score is a good metric to use when we need to seek a balance between precision and recall.
+F1-score is a good metric to use when we need to seek a balance between precision and recall.
 \end{enumerate}
 \section{Problem Cases}
 \subsection{Case 1: Flapping Plate Thrust}
+We're using the data from \cite{luqman2022thrust} about kinematic of a flapping plate to simulate the fin's movement of a fish on AUV (Autonomous Underwater Vehicle). In the study, the effect of the fin's stiffness and the flapping frequency on thrust production while the AUV is moving forward. The schematic is given in Figure \ref{fig:case1_problem}, here the fin rotates with a maximum angle alpha with a certain flapping frequency. The plate is composed of Acrylic and silicone rubber length attached in tandem. The plate with 0\% and 100\% percentage of acrylic represents the most flexible and the stiffest panel, respectively. The stiffness of the plate is varied by changing the proportion of the Acrylic and the silicone rubber length, in which the effective stiffness of the composite plate can then be calculated. For each proportion of material, the flapping frequency is varied and the thrust is measured using a set of experimental setup comprising a towing tank and a load cell.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=1.0\textwidth]{graph/case1_problem_1.jpg}
+        \caption{Caudal fin kinematic}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=0.5\textwidth]{graph/case1_problem_2.jpg}
+        \caption{An illustration of the fin panel used in the current experiment. The length $L$ of the fin panel is 100 mm. The length of the acrylic and silicone rubber part are denoted as $L_1$ and $L_2$, respectively}
+    \end{subfigure}
+    \caption{\label{fig:case1_problem} Schematic of the problem}
+\end{figure}
+
+The dataset consists of 140 data points and 3 columns. The columns are the flapping frequency \texttt{flapfreq}, the acrylic percentage \texttt{percentage\_ac} indicating the stiffness, and the thrust \texttt{Thrust\_N}. For this problem, we are going to predict the thrust produced by the flapping plate given the flapping frequency and the acrylic percentage.
+
+\paragraph{Data Inspection and Preprocessing}
+First, we check null values from the data set and make sure there is no null values, which is confirmed. Next, we may calculate the Pearson correlation coefficient between each columns, as shown in \ref{fig:case1_corr_heatmap}. We can see that the magnitude of the correlation coefficient of flapping frequency on the matrix is 0.3 and the magnitude of the correlation coefficient of stiffness is 0.15. So, we know that flapping frequency is more correlated to the output rather than stiffness. However, both the magnitudes are closer to 0 which means that both variables are quite uncorrelated with the output.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{graph/case1_corr_heatmap.png}
+    \caption{\label{fig:case1_corr_heatmap} Pearson correlation coefficient heatmap for case 1}
+\end{figure}
+We may also plot the data in a 3D scatter plot, as shown in Figure \ref{fig:case1_3d_scatter}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{graph/case1_3d_scatter.png}
+    \caption{\label{fig:case1_3d_scatter} 3D scatter plot of the data in case 1}
+\end{figure}
+Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
+
+\paragraph{Model Selection}
+Here, we have to predict a continuous value, thus we will use regression models. We will use linear regression and KNN regression.
+
+\paragraph{Model Training dan Evaluation}
+\subparagraph{Linear Regression}
+Using \ref{eq:betaval}, we can calculate the value of $\beta$s for linear regression. Their values including the hypothesis test is shown in Table \ref{tab:case1_beta_val}. 
+We also obtained the value of $R^2$ and MSE, which are stored in Table \ref{tab:case1_r2_rse}.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case1_beta_val}Coefficient for Linear Regression Model in Case 1}
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Beta &      Value &  Standard Error &  $t$-statistic &   $p$-value & Hypothesis Test Result \\
+        \midrule
+        0 &  2.685464 &        3.355178 &     0.800394 &  0.425208 &       Do Not Reject $H_0$ \\
+        1 &  0.048543 &        0.039070 &     1.242471 &  0.216705 &       Do Not Reject $H_0$ \\
+        2 &  3.225045 &        0.977165 &     3.300410 &  0.001302 &              Reject $H_0$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case1_r2_rse}Coefficient of Determination and Residual Standard Error for Linear Regression Model in Case 1}
+    \begin{tabular}{lr}
+        \toprule
+        Score Metric &      Value \\
+        \midrule
+        $R^2$ &      0.106227 \\
+        RSE &        12.910842 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subparagraph{KNN Regression}
+Before building the KNN model, we will scale the data based on the maximum and minimum values of the training set by using \texttt{MinMaxScaler} from \texttt{sklearn.preprocessing}, because the data distribution is not a normal but there is no outlier. The cross-validation for hyperparameter-tuning the $k$ values will be conducted with \texttt{GridSearchCV} from \texttt{sklearn.model\_selection}. Using 10-fold cross-validation, we obtained the best value of $k$ to be 2. Figure \ref{fig:case1_knn_rmse} shows the cross-validation score for each $k$ value. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{graph/case1_knn_rmse.png}
+    \caption{\label{fig:case1_knn_rmse} Cross-validation score for each $k$ value in case 1}
+\end{figure}
+
+\subparagraph{Model Evaluation}
+We will use the testing set to evaluate the accuracy of the model, using RSME and MAE value. The result is shown in Table \ref{tab:case1_model_eval}.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case1_model_eval} RMSE and MAE of Linear Regression and KNN Regression in Case 3}
+    \begin{tabular}{lrr}
+        \toprule
+        Model &      RMSE &       MAE \\
+        \midrule
+        Linear Regression &  11.102670 &  8.399192 \\
+        KNN Regression    &  2.308239 &  1.182974 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+After comparing 2 models we created earlier, we know that RMSE and MAE values of the KNN regression model is lower than the linear regression model. From there, we can conclude that the KNN regression model better describes the approximation relationship between thrust as the output with the frequency and the stiffness as the input variables. 
+Linear regression model does not fit to interpret the data set we process before can be seen from the RSE and $R^2$ score obtained, the $R^2$ score is closer to 0, it shows that data does not fit to the regression line
+
+\paragraph{Conclusion}
+From the results of calculating the coefficient of the linear regression model and the hypothesis testing in Table \ref{tab:case1_beta_val}, we can see that for $\beta_0$ and $\beta_1$, the hypothesis testing result is to do not reject $H_0$, we can interpret that the coefficients are not significant. While for $\beta_2$ the hypothesis testing result is to reject $H_0$, which means the coefficient is significant. 
+
+The results of hypothesis testing that do not reject $H_0$ are of $\beta_0$ and $\beta_1$, where $\beta_0$ is the intercept parameter and $\beta_1$ is the coefficient of the independent variable percentage of acrylic (stiffness). Because the $H_0$ of coefficient variable stiffness is not rejected, it can be concluded that this variable is most likely unrelated to output variable (Thrust). However, there is still a relationship between the independent variable flapping frequency and output because the hypothesis results for $\beta_2$ is to reject $H_0$.
+
+We may plot the result of both linear regression and KNN regression in a form of surface over the range of the training data, which is shown in Figure \ref{fig:case1_lr_knn_plane}.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case1_lr_plane.png}
+        \caption{Linear Regression}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case1_knnr_plane.png}
+        \caption{KNN Regression}
+    \end{subfigure}
+    \caption{\label{fig:case1_lr_knn_plane} Surface plot of the linear regression and KNN regression model in case 1}
+\end{figure}
+
 
 \subsection{Case 2: Aerodynamic Coefficient}
+We're using data from a study investigating about the impact of transonic airfoil geometries on the drag and lift production. The airfoil is designed to operate at Mach number of 0.73 and Angle of Attack of 2 degrees. The aerodynamics coefficients are evaluated using a simplified aerodynamic solver, which neglects the viscosity of the air. 
+
+The dataset contains 12 columns and 500 rows. The description for each column are shown in Table \ref{tab:case2_data_info}. Figure \ref{fig:case2_problem} also illustrate the parameters of the dataset. For this problem, we are going to predict the lift coefficient (\texttt{CL}) and drag coefficient (\texttt{CD}) based on the other parameters, and rank the importance of each parameter to the outputs.
+\begin{table}[H]
+    \centering
+
+    \caption{\label{tab:case2_data_info}Description of Data in Case 2}
+    \begin{tabular}{l|l}
+        \toprule
+        Column Name & Definition \\
+        \midrule
+        \texttt{rle} & Radius of leading edge \\
+        \texttt{xup} & Upper crest absissca \\
+        \texttt{yup} & Upper crest ordinate \\
+        \texttt{yxxup} & Upper crest curvature \\
+        \texttt{xlo} & Lower crest absissca \\
+        \texttt{ylo} & Lower crest ordinate \\
+        \texttt{yxxlo} & Lower crest curvature \\
+        \texttt{alpha\_te} & Trailing edge direction \\
+        \texttt{beta\_te} & Trailing edge wedge angle \\
+        \texttt{CL} & Lift coefficient \\
+        \texttt{CD} & Drag coefficient \\
+        \texttt{CM} & Moment coefficient \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{graph/case2_problem.jpg}
+    \caption{\label{fig:case2_problem} Illustration of the parameters in case 2}
+\end{figure}
+
+
+\paragraph{Data Inspection and Preprocessing}
+Based on initial inspection, our dataset have a total of 500 entries, and none of them are null. Next, we may calculate the Pearson correlation parameter between each columns, as shown in Figure \ref{fig:case2_corr_heatmap}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{graph/case2_corr_heatmap.png}
+    \caption{\label{fig:case2_corr_heatmap} Pearson correlation heatmap of the parameters in case 2}
+\end{figure}
+Based on values shown in \ref{fig:case2_corr_heatmap}, the input variables having the strongest correlation with \texttt{CD}, \texttt{CL}, and \texttt{CM} is demonstrated by \texttt{yup}, or the upper crest ordinate.
+
+Before we train the model, as we're going to rank the importance of each parameter, we may scale the data using \texttt{MinMaxScaler} from \texttt{sklearn.preprocessing}. We may also split the data into training and testing set, with the ratio of 80:20, using \texttt{train\_test\_split} from \texttt{sklearn.model\_selection}.
+
+\paragraph{Model Selection}
+Here, we have to predict continuous values, thus we will use regression models. We will use linear regression and KNN regression. 
+
+\paragraph{Model Building and Evaluation}
+\subparagraph{Linear Regression}
+Using \eqref{eq:betaval}, we can calculate the value of $\beta$s of \texttt{CD}, \texttt{CL}, and \texttt{CM} for the linear regression model. The results including the hypothesis test is shown in Table \ref{tab:case2_beta_val}. We also evaluate the $R^2$ and RSE score of the model as shown in Table \ref{tab:case2_r2_rse}.
+
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case2_beta_val} Coefficient for Linear Regression Model in Case 2}
+    \begin{subtable}{1.0\textwidth}
+        \centering
+        \caption{Coefficient for Linear Regression of \texttt{CD}}
+        \begin{tabular}[width=1.0\textwidth]{lrrrrr}
+            \toprule
+            Beta &      Values &  Standard Error &  $t$-statistic &        $p$-value & Hypothesis Test Result \\
+            \midrule
+            0 &  0.003348 &        0.000917 &     3.650961 &   2.967747e-04 &              Reject H0 \\
+            1 & -0.000122 &        0.000574 &    -0.212497 &   8.318299e-01 &       Do Not Reject H0 \\
+            2 & -0.008557 &        0.000575 &   -14.881558 &   5.263659e-40 &              Reject H0 \\
+            3 &  0.019872 &        0.000572 &    34.719043 &  1.666999e-121 &              Reject H0 \\
+            4 & -0.000251 &        0.000570 &    -0.440322 &   6.599476e-01 &       Do Not Reject H0 \\
+            5 & -0.001914 &        0.000577 &    -3.315638 &   9.998077e-04 &              Reject H0 \\
+            6 &  0.006563 &        0.000580 &    11.320195 &   6.876674e-26 &              Reject H0 \\
+            7 &  0.002742 &        0.000570 &     4.809075 &   2.167568e-06 &              Reject H0 \\
+            8 & -0.003241 &        0.000570 &    -5.684308 &   2.572116e-08 &              Reject H0 \\
+            9 &  0.000050 &        0.000568 &     0.088217 &   9.297497e-01 &       Do Not Reject H0 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \vskip \baselineskip
+    \begin{subtable}{1.0\textwidth}
+        \centering
+        \caption{Coefficient for Linear Regression of \texttt{CL}}
+        \begin{tabular}[width=1.0\textwidth]{lrrrrr}
+            \toprule
+            Beta &      Values &  Standard Error &  $t$-statistic &        $p$-value & Hypothesis Test Result \\
+            \midrule
+            0 &  0.521795 &        0.005601 &    93.166063 &  4.622280e-269 &              Reject H0 \\
+            1 &  0.015680 &        0.003507 &     4.471338 &   1.019951e-05 &              Reject H0 \\
+            2 &  0.071101 &        0.003511 &    20.248937 &   7.215814e-63 &              Reject H0 \\
+            3 &  0.263018 &        0.003495 &    75.250845 &  1.013006e-234 &              Reject H0 \\
+            4 &  0.058669 &        0.003483 &    16.842160 &   2.998194e-48 &              Reject H0 \\
+            5 & -0.058992 &        0.003525 &   -16.734515 &   8.600908e-48 &              Reject H0 \\
+            6 &  0.220595 &        0.003540 &    62.308767 &  3.810448e-205 &              Reject H0 \\
+            7 &  0.075028 &        0.003482 &    21.547331 &   1.905243e-68 &              Reject H0 \\
+            8 & -0.104502 &        0.003482 &   -30.015382 &  1.611219e-103 &              Reject H0 \\
+            9 &  0.000270 &        0.003466 &     0.077996 &   9.378711e-01 &       Do Not Reject H0 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \vskip \baselineskip
+    \begin{subtable}{1.0\textwidth}
+        \centering
+        \caption{Coefficient for Linear Regression of \texttt{CM}}
+        \begin{tabular}[width=1.0\textwidth]{lrrrrr}
+            \toprule
+            {} &      Beta &  Standard Error &  $t$-statistic &        $p$-value & Hypothesis Test Result \\
+            \midrule
+            0 &  0.045960 &        0.001605 &    28.634104 &   5.149599e-98 &              Reject H0 \\
+            1 & -0.004924 &        0.001005 &    -4.899170 &   1.411907e-06 &              Reject H0 \\
+            2 &  0.026385 &        0.001006 &    26.219789 &   3.620143e-88 &              Reject H0 \\
+            3 &  0.100599 &        0.001002 &   100.431480 &  2.655315e-281 &              Reject H0 \\
+            4 &  0.010215 &        0.000998 &    10.232636 &   6.212311e-22 &              Reject H0 \\
+            5 & -0.026673 &        0.001010 &   -26.402278 &   6.382478e-89 &              Reject H0 \\
+            6 &  0.052365 &        0.001015 &    51.611323 &  1.240393e-176 &              Reject H0 \\
+            7 &  0.022564 &        0.000998 &    22.611134 &   5.382271e-73 &              Reject H0 \\
+            8 & -0.029863 &        0.000998 &   -29.929553 &  3.518305e-103 &              Reject H0 \\
+            9 &  0.000521 &        0.000993 &     0.524790 &   6.000263e-01 &       Do Not Reject H0 \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+\end{table}
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case2_r2_rse}Coefficient of Determination and Residual Standard Error for Linear Regression Model in Case 2}
+    \begin{tabular}[width=1.0/textwidth]{lrrr}
+        \toprule
+        Score Metric &      \texttt{CD} & \texttt{CL} & \texttt{CM} \\
+        \midrule
+        $R^2$ &      0.808617 & 0.967612 & 0.975402 \\
+        RSE &        0.003305 & 0.020183 & 0.005784 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+We may now evalute the linear regression model using $R^2$ and $RSE$ score for each aerodynamic coefficients from \ref{tab:case2_r2_rse}.
+\begin{enumerate}
+    \item \texttt{CD}
+    
+    From the table, we can see that the obtained value of $R^2$ is 0.808617. This translates to roughly 81\% variance in the model is explained by the model. In engineering, preceding $R^2$ value is considered good and shows strong correlation between input and output. Therefore, the model is viable for making future predictions.
+    \item \texttt{CL}
+    
+    From the table, we can see that the obtained value of $R^2$ is 0.967612. This translates to roughly 97\% variance in the model is explained by the model. This $R^2$ value is considered good and shows strong correlation between input and output and therefore, the model is viable for making future predictions.
+    \item \texttt{CM}
+    
+    From the table, we can see that the obtained value of $R^2$ is 0.975402. This translates to roughly 98\% variance in the model is explained by the model. Same as previous coefficients, the $R^2$ value is considered good and shows strong correlation between input and output, making the model is viable for making future predictions.
+\end{enumerate}
+
+\subparagraph{KNN Regression}
+As the data has been scaled, we may continue directly to the model building. We will also conduct a grid search to find the $k$ value for the KNN regression model, using \texttt{GridSearchCV} from \texttt{sklearn.model\_selection}. With 5-fold cross validation, we obta
+
+\subparagraph{Model Evaluation}
+
+\paragraph{Conclusion}
 
 \subsection{Case 3: Wing Flutter}
-We're using the data from \cite{palar2020gauss} about flutter detection on NACA 64A10 airfoil. The datasets consist of 300 data points and 3 columns. The columns are the Mach number $M$, the flutter speed $V_f$, and the damping coefficient $DC$. For this problem, we are going predict the occurence of flutter, that is, whether the damping coefficient is positive or negative, given the Mach number and the flutter speed. A negative damping coefficient indicates that the airfoil is unstable and will flutter, and vice versa.
+We're using the data from \cite{palar2023kernel} about flutter detection on NACA 64A10 airfoil. The dataset consist of 300 data points and 3 columns. The columns are the Mach number \texttt{M}, the flutter speed \texttt{Vf}, and the damping coefficient \texttt{DC}. For this problem, we are going predict the occurence of flutter, that is, whether the damping coefficient is positive or negative, given the Mach number and the flutter speed. A negative damping coefficient indicates that the airfoil is unstable and will flutter, and vice versa.
 
-\subsubsection{Data Inspection and Preprocessing}
+\paragraph{Data Inspection and Preprocessing}
 Based on initial inspection, our dataset have a total of 300 entries, and none of them are null. Moreover, all of the columns are numerical, with general information stored in Table \ref{tab:case3_data_info}. 
-\begin{table}
+\begin{table}[H]
     \centering
     \caption{ \label{tab:case3_data_info}General Statistics of Data in Case 3}
     \begin{tabular}{lrrr} 
         \toprule
-        {} &           $M$ &          $V_f$ &          $DC$ \\
+        {} &           \texttt{M} &          \texttt{Vf} &          \texttt{DC} \\
         \midrule
         count &  300.000000 &  300.000000 &  300.000000 \\
         mean  &    0.768178 &    1.145337 &   -0.005795 \\
@@ -309,21 +583,14 @@ Based on initial inspection, our dataset have a total of 300 entries, and none o
         \bottomrule
     \end{tabular}
 \end{table}
-and the Pearson correlation coefficient between each columns are shown in Table \ref{tab:case3_corr_heatmap}.
-\begin{table}
+and the Pearson correlation coefficient between each columns are shown in Figure \ref{fig:case3_corr_heatmap}.
+\begin{figure}[H]
     \centering
-    \caption{ \label{tab:case3_corr_heatmap}Pearson Correlation Coefficient of Data in Case 3}
-    \begin{tabular}{lrrr} 
-        \toprule
-        {} &           $M$ &          $V_f$ &          $DC$ \\
-        \midrule
-        $M$ &  1.000000 &  -0.036742 & -0.308873 \\
-        $V_f$ &  -0.036742 &  1.000000 & -0.507456 \\
-        $DC$ & -0.308873 & -0.507456 &  1.000000 \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-We're given a set of numerical data, but we need to predict a categorical values. Therefore, we may add a new column, named $F$ which indicates whether the airfoil will flutter or not. We can see the distribution of the data in Figure \ref{fig:case3_data_dist}.
+    \includegraphics[width=0.75\textwidth]{graph/case3_corr_heatmap.png}
+    \caption{Pearson correlation coefficient for case 3}
+    \label{fig:case3_corr_heatmap}
+\end{figure}
+We're given a set of numerical data, but we need to predict a categorical values. Therefore, we may add a new column, named \texttt{F}, which indicates whether the airfoil will flutter or not. We can see the distribution of the data in Figure \ref{fig:case3_data_dist}.
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{graph/case3_data_dist_hue.png}
@@ -337,21 +604,24 @@ Moreover, as we have only two inputs and an output, we may plot the data in a 3D
     \caption{3D scatter plot of the sample data in case 3}
     \label{fig:case3_3d_scatter}
 \end{figure}
+From Figure \ref{fig:case3_3d_scatter}, we can see that high Mach number and high flutter speed is dominated by negative damping coefficient, which means that the airfoil will flutter. This is also supported by the correlation coefficient in Table \ref{fig:case3_corr_heatmap}, which shows that the damping coefficient is negatively correlated with both Mach number and flutter speed. From Table \ref{fig:case3_corr_heatmap}, we can see that the Mach number and flutter speed correlation coefficient is very small, which means that they are more likely to be independent with each other. We can also see the correlation between damping coefficient and other variables, which shows that the damping coefficient not quite correlated with the others, but it is more correlated with flutter speed than Mach number.
 
-\subsubsection{Model Selection}
-Here, we have to predict a categorical value, so it's quite intuitive if we use a classification model. However, the classification of our target/response, $F$, is based on value of another column, $DC$, which can be predicted using a regression model. Therefore, we will use two approach in solving this problem:
+Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
+
+\paragraph{Model Selection}
+Here, we have to predict a categorical value, so it's quite intuitive if we use a classification model. However, the classification of our target/response, \texttt{F}, is based on value of another column, \texttt{DC}, which can be predicted using a regression model. Therefore, we will use two approach in solving this problem:
 \begin{enumerate}
-    \item Predict $DC$ using a regression model, then obtain $F$ by classifying the result manually.
-    \item Predict $F$ using a classification model.
+    \item Predict \texttt{DC} using a regression model, then obtain \texttt{F} by classifying the result manually.
+    \item Predict \texttt{F} using a classification model.
 \end{enumerate}
 
-\subsubsection{Model Training and Evaluation}
-\paragraph{Regression Approach}
-We will use both linear regression and KNN regression to predict the value of $DC$.
-\subparagraph{Linear Regression} Using the \eqref{eq:betaval}, the resulting coefficient for the linear regression model and the hypothesis testing is shown in Table \ref{tab:case3_ols_coef}. We can see that all $H_0$ is rejected and thus, all of the coefficients are significant. 
-\begin{table}
+\paragraph{Model Training and Evaluation}
+For both KNN algorithm, we will use \texttt{KNearestRegressor} and \texttt{KNearestClassifier} from \texttt{sklearn.neighbors}. Also, before building the KNN model, we will scale the data based on the maximum and minimum values of the training set by using \texttt{MinMaxScaler} from \texttt{sklearn.preprocessing}, because the data distribution is not a normal but there is no outlier. The cross-validation for hyperparameter-tuning the $k$ values will be conducted with \texttt{GridSearchCV} from \texttt{sklearn.model\_selection}. 
+
+\subparagraph{Regression Model} We will use linear regression and KNN regression to predict the damping coefficient. Using \eqref{eq:betaval}, the resulting coefficient for the linear regression model and the hypothesis testing is shown in Table \ref{tab:case3_beta_val}. We can see that all $H_0$ is rejected and thus, all of the coefficients are significant. 
+\begin{table}[H]
     \centering
-    \caption{ \label{tab:case3_ols_coef}OLS Coefficient for Linear Regression Model in Case 3}
+    \caption{\label{tab:case3_beta_val}Coefficient for Linear Regression Model in Case 3}
     \begin{tabular}{lrrrrr}
         \toprule
         Beta &      Value &  Standard Error &  $t$-statistic &       $p$-value & Hypothesis Test Result \\
@@ -362,186 +632,146 @@ We will use both linear regression and KNN regression to predict the value of $D
         \bottomrule
     \end{tabular}
 \end{table}
-With this model, we obtained a $R^2$ score of 0.39777 and an RSE score of 0.03249. This indicates that the relation between $DC$ and the inputs are not linear. We can see the resulting regression plane in Figure \ref{fig:case3_3d_linreg_plane}.
+With this model, we obtained $R^2$ and RSE as stored in \ref{tab:case3_r2_rse_lr}. $R^2$ value shown in the table indicates that the relation between \texttt{DC} and the inputs are not linear.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case3_r2_rse_lr}Coefficient of Determination and Residual Standard Error for Linear Regression Model in Case 3}
+    \begin{tabular}{lr}
+        \toprule
+        Score Metric &      Value \\
+        \midrule
+        $R^2$ &      0.397773 \\
+        RSE &        0.032493 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Now, we may train our KNN regression model. Using 10-folds cross-validation, we obtained the best $k$ value of 2, by taking RMSE as the scoring method. Figure \ref{fig:case3_knnr_rmse} shows the result of the hyperparameter-tuning, and shows that the RMSE is the lowest when $k=2$. 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{graph/case3_3d_linreg_plane.png}
-    \caption{Regression plane of the linear regression model in case 3}
-    \label{fig:case3_3d_linreg_plane}
+    \includegraphics[width=0.5\textwidth]{graph/case3_knnr_rmse.png}
+    \caption{$k$ hyperparameter-tuning of KNN regression model using RMSE in case 3}
+    \label{fig:case3_knnr_rmse}
+\end{figure}
+We may plot the result of both linear regression and KNN regression in a form of surface over the range of the training data, which is shown in Figure \ref{fig:case3_lr_knnr_plane}. We can see that the linear regression model is not able to capture the non-linear relation between the inputs and the output.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case3_lr_plane.png}
+        \caption{Linear Regression}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case3_knnr_plane.png}
+        \caption{KNN Regression}
+    \end{subfigure}
+
+    \caption{Prediction surface of the regression model on training data in case 3 using (a) linear regression and (b) KNN regression}
+    \label{fig:case3_lr_knnr_plane}
+\end{figure}
+After evaluating each model own parameters, we may now evaluate it with the testing data. The RMSE and MAE of the prediction is shown in Table \ref{tab:case3_lr_knnr_rmse_mae}, calculated using \texttt{mean\_squared\_error} and \texttt{mean\_absolute\_error} from \texttt{sklearn.metrics}. From there, we can see that the KNN regression model is able to predict the damping coefficient better than the linear regression model, as both the RMSE and MAE is lower than the linear regression model.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case3_lr_knnr_rmse_mae} RMSE and MAE of Linear Regression and KNN Regression in Case 3}
+    \begin{tabular}{lrr}
+        \toprule
+        Model &      RMSE &       MAE \\
+        \midrule
+        Linear Regression &  0.029969 &  0.019001 \\
+        KNN Regression    &  0.007907 &  0.005573 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subparagraph{Classification Model} We will use logistic regression and KNN classification to predict the flutter occurence. Using the algorithm of \eqref{eq:logregnewraph}, the resulting coefficient for the logistic regression model and the hypothesis testing is shown in Table \ref{tab:case3_logit_coef}. We can see that all $H_0$ is rejected and thus, all of the coefficients are significant. 
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case3_logit_coef}Coefficient for Logistic Regression Model in Case 3}
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Beta &      Value &  Standard Error &  $t$-statistic &       $p$-value & Hypothesis Test Result \\
+        \midrule
+        0 &  0.158557 &        0.017985 &     8.816034 &  2.555677e-16 &              Reject $H_0$ \\
+        1 & -0.145096 &        0.022156 &    -6.548710 &  3.543494e-10 &              Reject $H_0$ \\
+        2 & -0.046859 &        0.004335 &   -10.808856 &  2.045755e-22 &              Reject $H_0$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+Now, we may train our KNN classification model. Using 10-fold cross-validation, we obtained the best $k$ value of 3, taking F1-score as the scoring method. Figure \ref{fig:case3_knnc_f1} shows the result of the hyperparameter-tuning, and shows that the F1-score is the highest when $k=3$. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{graph/case3_knnc_f1.png}
+    \caption{$k$ hyperparameter-tuning of KNN classification model using F1-score in case 3}
+    \label{fig:case3_knnc_f1}
 \end{figure}
 
-
-
-\section{Conclusion}
-
-\section{General Guidelines}
-
-The following section outlines general (nonformatting) guidelines to follow, drawn from the original AIAA Manuscript Preparation Kit. These guidelines are applicable to all authors (except as noted), and include information on the policies and practices relevant to the publication of your manuscript.
-
-\subsection{Publication by AIAA}
-Your manuscript cannot be published by AIAA if:
-\begin{enumerate}
-\item It has been published previously or
-
-\item The work contains copyright-infringing material or
-
-\item An appropriate copyright statement has not yet been selected.
-\end{enumerate}
-
-\subsection{Paper Review and Visa Considerations}
-
-It is the responsibility of the author to obtain any required government or company reviews for their papers in advance of publication. Start early to determine if the reviews are required; this process can take several weeks.
-
-If you plan to attend an AIAA Forum, technical conference or professional development course held in the United States and you require a visa for travel, it is incumbent upon you to apply for a visa with the U.S.~embassy (consular division) or consulate with ample time for processing.  To avoid bureaucratic problems, AIAA strongly suggests that you submit your formal application to U.S.~ authorities a minimum of 120 days in advance of the date of anticipated travel.
-
-Prospective conference and course attendees requiring a visa to travel to the United States should first contact
-
-AIAA to request an official letter of invitation. This letter and a copy of the conference call for papers should be presented along with the required documentation to the U.S. consular officials as part of the formal application process.  AIAA cannot directly intervene with the U.S. Department of State, consular offices, or embassies on behalf of individuals applying for visas. A letter of invitation can be requested by completing the Visa Invitation Letter Request Form at \url{https://www.aiaa.org/Secondary.aspx?id=6258} or you may contact the Event Registrar at \url{invitation@aiaa.org} for more information.
-
-\subsection{Control ID Number vs Paper Number}
-
-Your paper was assigned a control ID number at the time you submitted your abstract. It is critical that you reference the tracking number and conference name when contacting AIAA regarding your submission. The control ID number is \emph{not} the final AIAA paper number. The paper number, which appears in the format AIAA-20XX-XXXX, will be used to refer to your paper in the program and in any publication format. It will not be assigned until shortly before the conference. \textbf{Do not include a paper number anywhere on your paper, as this number will be stamped automatically in the top right corner of your paper at the time of processing.}
-
-\subsection{Copyright}
-
-Before AIAA can print or publish any paper, the copyright information must be completed in the submission system. Failure to complete the electronic form correctly could result in your paper not being published. The following fields must be completed:
-
-\begin{enumerate}
-\item Clearance Statement
-\item Non-Infringement Statement
-\item Publication Status Statement
-\item One Copyright Assignment Statement (Select either A, B, C, or D)
-\end{enumerate}
-
-Be sure to read the copyright statements carefully. AIAA requires a copyright transfer from the author(s) to AIAA or a license to publish and distribute your material; government authors can assert that the work is in the public domain. If you are not sure which copyright statement to use, contact your legal department. Refer to AIAA’s Rights and Permissions page at \url{www.aiaa.org} for more information; AIAA cannot help you determine which statement to use. Do not include a copyright statement anywhere on your paper. A hard copy of the form is found in the Author Kit for your reference. As you will be completing this form online, you do not need to fill out the hard-copy form. Do not include a copyright statement anywhere on your paper, and do not upload a copyright form with your paper. The correct statement will be stamped automatically at the time of processing.
-
-\subsection{Submission Deadlines}
-
-Manuscripts will be accepted for upload to the system from the receipt of the email invitation until the deadline set for the conference. You will be notified of the specific manuscript submission deadline in your acceptance letter, and the deadline will also be listed on the conference web page at AIAA. Please do not upload a draft version of your manuscript with the intent to upload a final version later. \textbf{Please review your manuscript very carefully before completing your submission to ensure that your paper is complete and final in all respects. Once the manuscript deadline has passed you will be locked out of the manuscript site so it is critical that you upload a final, carefully proofed document.}
-
-Online conference proceedings will be made accessible to attendees who have registered for the ``full conference'' when the conference opens. Once the proceedings are published online, the conference papers will be considered the version of record and may not be removed or replaced. Changes to published papers can be made available through the Crossmark feature, where corrections and updates are accessed by clicking the Crossmark icon available on every paper published in Aerospace Research Central.
-
-The opportunity to submit Crossmark updates will be provided to presenting authors starting the first day of the conference through 2000 hrs/8 pm Eastern Time, seven business days after the last day of the conference.  The proceedings will be updated with Crossmark updates shortly after that date.  
-
-AIAA will NOT accept changes and/or change requests that solely correct grammatical errors, spelling errors, or errors in formatting.  All corrections should be for editorially significant changes where the change affects interpretation or crediting of the work.
-
-To ensure conference quality, session chairs will enforce a ``no paper, no podium'' rule. This policy is intended to eliminate no-shows, to improve the quality of the conference for all participants, and to ensure that the published proceedings accurately represent the presentations made at a conference.
-
-\section{Detailed Formatting Instructions}
-
-The styles and formats for the AIAA Papers Template have been incorporated into the structure of this document. If you are using \LaTeX{}, please use this template to prepare your manuscript. A Microsoft Word template is also available from AIAA's website if you prefer to use Microsoft Word 2001 or later. Regardless of which program you use to prepare your manuscript, please use the formatting instructions contained in this document as a guide.
-
-If you are using the AIAA Meeting Papers \LaTeX{} Template file to prepare your manuscript, you can simply type your own text over sections of this document, or cut and paste from another document and use the available markup styles. If you choose to cut and paste, select the text from your original document and choose Edit>Copy. (Do not select your title and author information, since the document spacing may be affected. It is a simple task to reenter your title and author information in the template.) Open the \LaTeX{} template file. Place your cursor in the text area of the template and select Edit>Paste. Please note that special formatting (e.g., subscripts, superscripts, italics) may be lost when you copy your text into the template. Use italics for emphasis; do not underline. Use the compiled \LaTeX{} pdf to see the most accurate representation of how your final paper will appear.
-
-\subsection{Document Text}
-The default font for AIAA papers is Times New Roman, 10-point size.  The first line of every paragraph should be indented, and all lines should be single-spaced. Default margins are 1'' on all sides. In the electronic version of this template, all margins and other formatting is preset. There should be no additional lines between paragraphs.
-
-\begin{quoting}
-Extended quotes, such as this example, are to be used when material being cited is longer than a few sentences, or the standard quotation format is not practical. In this \LaTeX template, the appropriate command environment is \verb|\begin{quoting}...\end{quoting}|. Extended quotes are to be in Times New Roman, 9-point font, indented 0.4'' and full justified.
-\end{quoting}
-
-\emph{NOTE:} If you are using the electronic \LaTeX{} template to format your manuscript, the required spacing and formatting will be applied automatically.
-
-\subsection{Headings}
-The title of your paper should be typed in bold, 24-point type, with capital and lower-case letters, and centered at the top of the page. The names of the authors, business or academic affiliation, city, and state/province should follow on separate lines below the title. The names of authors with the same affiliation can be listed on the same line above their collective affiliation information. Author names are centered, and affiliations are centered and in italic type immediately below the author names. The affiliation line for each author is to include that author’s city, state, and zip/postal code (or city, province, zip/postal code and country, as appropriate). The first-page footnotes (lower left-hand side) contain the job title and department name, street address/mail stop, and AIAA member grade for each author. Author email addresses may be included also.
-
-Major headings (``sections'' in the \LaTeX{} template commands) are bold 11-point font, centered, and numbered with Roman numerals.
-
-Subheadings (``subsections'' in the \LaTeX{} template commands) are bold, flush left, and numbered with capital letters. 
-
-Sub-Subheadings (``subsubsections'' in the \LaTeX{} template commands) are italic, flush left, and numbered (1. 2. 3. etc.)
-
-
-\subsection{Abstract}
-The abstract should appear at the beginning of your paper. It should be one paragraph long (not an introduction) and complete in itself (no reference numbers). It should indicate subjects dealt with in the paper and state the objectives of the investigation. Newly observed facts and conclusions of the experiment or argument discussed in the paper must be stated in summary form; readers should not have to read the paper to understand the abstract. The abstract should be bold, indented 3 picas (1/2'') on each side, and separated from the rest of the document by blank lines above and below the abstract text..
-
-\subsection{Nomenclature}
-Papers with many symbols may benefit from a nomenclature list that defines all symbols with units, inserted between the abstract and the introduction. If one is used, it must contain all the symbology used in the manuscript, and the definitions should not be repeated in the text. In all cases, identify the symbols used if they are not widely recognized in the profession. Define acronyms in the text, not in the nomenclature.
-
-\subsection{Footnotes and References}
-Footnotes, where they appear, should be placed above the 1'' margin at the bottom of the page. To insert footnotes into the template, use the Insert>Footnote feature from the main menu as necessary. Numbered footnotes as formatted automatically in the template are acceptable, but superscript  symbols are the preferred AIAA style, *, $\dag$, $\ddag$, \S, \P, **, $\dag\dag$, $\ddag\ddag$, \S\S, etc.
-
-List and number all references at the end of the paper. Corresponding bracketed numbers are used to cite references in the text \cite{vatistas1986reverse}, including citations that are an integral part of the sentence (e.g., ``It is shown in \cite{dornheim1996planetary} that\ldots '') or follow a mathematical expression: ``$A^{2} + B = C$ (Ref.~\cite{terster1997nasa}).'' For multiple citations, separate reference numbers with commas \cite{peyret2012computational,oates1997aerothermodynamics}, or use a dash to show a range \cite{volpe1994techniques,thompsonspacecraft,chi1993fluid,brandis2016nonequi}. Reference citations in the text should be in numerical order.
-
-In the reference list, give all authors' names; do not use ``et al.''. Papers that have not been published should be cited as ``unpublished''; papers that have been submitted or accepted for publication should be cited as ``submitted for publication.'' Private communications and personal website should appear as footnotes rather than in the reference list.
-
-References should be cited according to the standard publication reference style (for examples, see the ``References'' section of this template). Never edit titles in references to conform to AIAA style of spellings, abbreviations, etc. Names and locations of publishers should be listed; month and year should be included for reports and papers. For papers published in translation journals, please give the English citation first, followed by the original foreign language citation.
-
-\subsection{Images, Figures and Tables}
-All artwork, captions, figures, graphs, and tables will be reproduced exactly as submitted. Be sure to position any figures, tables, graphs, or pictures as you want them printed. AIAA will not be responsible for incorporating your figures, tables, etc. (Company logos and identification numbers are not permitted on your illustrations.)
-
-Do not insert your tables and figures in text boxes. Figures should have no background, borders, or outlines. In the \LaTeX{} template, use the ``caption'' command to type caption text. Captions are bold with a single tab (no hyphen or other character) between the figure number and figure description.
-
-% \begin{table}
-% \caption{\label{tab:table1} Transitions selected for thermometry}
-% \centering
-% \begin{tabular}{lcccccc}
-% \hline
-% & Transition& & \multicolumn{2}{c}{}\\\cline{2-2}
-% Line& $\nu''$& & $J'' $& Frequency, cm$^{-1}$& $FJ$, cm$^{-1}$& $G\nu $, cm$^{-1}$\\\hline
-% a& 0& P$_{12}$& 2.5& 44069.416& 73.58& 948.66\\
-% b& 1& R$_{2}$& 2.5& 42229.348& 73.41& 2824.76\\
-% c& 2& R$_{21}$& 805& 40562.179& 71.37& 4672.68\\
-% d& 0& R$_{2}$& 23.5& 42516.527& 1045.85& 948.76\\
-% \hline
-% \end{tabular}
-% \end{table}
-
-
-\begin{figure}[hbt!]
-\centering
-\includegraphics[width=.5\textwidth]{graph}
-\caption{Magnetization as a function of applied fields.}
+\subparagraph{Model Evaluation} As we're dealing with a classification problem, we will use the scores of \eqref{eq:accuracy}, \eqref{eq:precision}, \eqref{eq:recall}, and \eqref{eq:f1score} to evaluate the model. The scores is calculated using \texttt{classification\_report} from \texttt{sklearn.metrics}. We will also provide the confusion matrix heatmap of the model to visualize more which how many data in each class is predicted right or wrong by the models. The result of the evaluation is shown in Table \ref{tab:case3_classification_report} and Figure \ref{fig:case3_confusion}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{graph/case3_confusion.png}
+    \caption{Confusion matrix heatmap of the regression and classification model in case 3}
+    \label{fig:case3_confusion}
 \end{figure}
 
-Place figure captions below all figures; place table titles above the tables. If your figure has multiple parts, include the labels ``a),'' ``b),'' etc. below and to the left of each part, above the figure caption. Please verify that the figures and tables you mention in the text actually exist. \emph{Please do not include captions as part of the figures, and do not put captions in separate text boxes linked to the figures.} When citing a figure in the text, use the abbreviation ``Fig.'' except at the beginning of a sentence. Do not abbreviate ``Table.'' Number each different type of illustration (i.e., figures, tables, images) sequentially with relation to other illustrations of the same type.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case3_classification_report}Classification report of the regression and classification model in case 3}
+    \begin{tabular}{llrrrr}
+        \toprule
+        Model                               & Class         &  Precision    &  Recall       &  F1-score     & Accuracy \\
+        \midrule
+        \multirow{2}{*}{Linear Regression}  & Flutter       &  0.77         &  0.83         &  0.80         &  \multirow{2}{*}{0.83} \\
+                                            & Non-flutter   &  0.88         &  0.83         &  0.86         &   \\
+        \midrule
+        \multirow{2}{*}{KNN Regression}     & Flutter       &  0.92         &  0.96         &  0.94         &  \multirow{2}{*}{0.95} \\
+                                            & Non-flutter   &  0.97         &  0.94         &  0.96         &   \\
+        \midrule
+        \multirow{2}{*}{Logistic Regression} & Flutter       &  0.74         &  0.71         &  0.72         &  \multirow{2}{*}{0.78} \\
+                                            & Non-flutter   &  0.81         &  0.83         &  0.82         &   \\
+        \midrule
+        \multirow{2}{*}{KNN Classification} & Flutter       &  0.86         &  1.00         &  0.92         &  \multirow{2}{*}{0.93} \\
+                                            & Non-flutter   &  1.00         &  0.89         &  0.94         &   \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+We can see that logistic regression model has the lowest accuracy, precision, recall, and F1-score. 
 
-Figure axis labels are often a source of confusion. Use words rather than symbols. As in the example to the right, write the quantity ``Magnetization'' rather than just ``M.'' Do not enclose units in parenthesis, but rather separate them from the preceding text by commas. Do not label axes only with units. As in Fig.~1, for example, write ``Magnetization, \si[per-mode=symbol]{\ampere\per\meter},'' not just ``A/m.'' Do not label axes with a ratio of quantities and units. For example, write ``Temperature, K,'' not ``Temperature/K.''
-
-Multipliers can be especially confusing. Write ``Magnetization, \si[per-mode=symbol]{\kilo\ampere\per\meter}'' or ``Magnetization, \SI[per-mode=symbol]{e3}{\ampere\per\meter}.'' Do not write ``Magnetization (A/m) x 1000'' because the reader would not then know whether the top axis label in Fig.~1 meant 16000 A/m or 0.016 A/m. Figure labels must be legible, and all text within figures should be uniform in style and size, no smaller than 8-point type.
-
-\subsection{Equations, Numbers, Symbols, and Abbreviations}
-Equations are numbered consecutively, with equation numbers in parentheses flush right, as in Eq.~\eqref{sample:equation}. Insert a blank line above and below the equation. To insert an equation into the \LaTeX{} document, use the \verb|\begin{equation}...\end{equation}| command environment.
-
-A sample equation is included here, formatted using the preceding instructions. To make your equation more compact, you can use the solidus (/), the exp function, or appropriate exponents. Use parentheses to avoid ambiguities in denominators.
-
-\begin{equation}
-\label{sample:equation}
-\int^{r_2}_0 F(r,\varphi){\rm d}r\,{\rm d}\varphi = [\sigma r_2/(2\mu_0)]\int^{\infty}_0\exp(-\lambda|z_j-z_i|)\lambda^{-1}J_1 (\lambda r_2)J_0 (\lambda r_i\,\lambda {\rm d}\lambda)
-\end{equation}
-
-Be sure that the symbols in your equation are defined before the equation appears, or immediately following. Italicize symbols ($T$ might refer to temperature, but T is the unit tesla). Refer to ``Eq.~(1),'' not ``(1)'' or ``equation (1)'' except at the beginning of a sentence: ``Equation (1) is\ldots'' Equations can be labeled other than ``Eq.'' should they represent inequalities, matrices, or boundary conditions. If what is represented is really more than one equation, the abbreviation ``Eqs.'' can be used.
-
-Define abbreviations and acronyms the first time they are used in the text, even after they have already been defined in the abstract. Very common abbreviations such as AIAA, SI, ac, and dc do not have to be defined. Abbreviations that incorporate periods should not have spaces: write ``P.R.,'' not ``P.~R.'' Delete periods between initials if the abbreviation has three or more initials; e.g., U.N.~but ESA. Do not use abbreviations in the title unless they are unavoidable (for instance, ``AIAA'' in the title of this article).
-
-\subsection{General Grammar and Preferred Usage}
-Use only one space after periods or colons. Hyphenate complex modifiers: ``zero-field-cooled magnetization.'' Avoid dangling participles, such as, ``Using Eq.~(1), the potential was calculated.'' [It is not clear who or what used Eq.~(1).] Write instead ``The potential was calculated using Eq.~(1),'' or ``Using Eq.~(1), we calculated the potential.''
-
-Insert a zero before decimal points: ``0.25,'' not ``.25.'' Use ``\si{\centi\meter\squared}'' not ``cc.'' Indicate sample dimensions as ``$\SI{0.1}{\centi\meter} \times \SI{0.2}{\centi\meter}$,'' not ``$0.1 \times \SI{0.2}{\centi\meter\squared}$.'' The preferred abbreviation for ``seconds'' is ``s,'' not ``sec.'' Do not mix complete spellings and abbreviations of units: use ``\si[per-mode=symbol]{\weber\per\meter\squared}'' or ``webers per square meter,'' not ``webers/m$^2$.'' When expressing a range of values, write ``7 to 9'' or ``7--9,'' not ``7$\sim$9.''
-
-A parenthetical statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within parenthesis.) In American English, periods and commas are placed within quotation marks, like ``this period.'' Other punctuation is ``outside''! Avoid contractions; for example, write ``do not'' instead of ``don’t.'' The serial comma is preferred: ``A, B, and C'' instead of ``A, B and C.''
-
-If you wish, you may write in the first person singular or plural and use the active voice (``I observed that\ldots'' or ``We observed that\ldots'' instead of ``It was observed that\ldots''). Remember to check spelling. If your native language is not English, please ask a native English-speaking colleague to proofread your paper.
-
-Be aware of the different meanings of the homophones ``affect'' (usually a verb) and ``effect'' (usually a noun), ``complement'' and ``compliment,'' ``discreet'' and ``discrete,'' ``principal'' (e.g., ``principal investigator'') and ``principle'' (e.g., ``principle of measurement''). Do not confuse ``imply'' and ``infer.''
-
-The word ``data'' is plural, not singular (i.e., ``data are,'' not ``data is''). The subscript for the permeability of vacuum $\mu_0$ is zero, not a lowercase letter ``o.'' The term for residual magnetization is ``remanence''; the adjective is ``remanent''; do not write ``remnance'' or ``remnant.'' The word ``micrometer'' is preferred over ``micron'' when spelling out this unit of measure. A graph within a graph is an ``inset,'' not an ``insert.'' The word ``alternatively'' is preferred to the word ``alternately'' (unless you really mean something that alternates). Use the word ``whereas'' instead of ``while'' (unless you are referring to simultaneous events). Do not use the word ``essentially'' to mean ``approximately'' or ``effectively.'' Do not use the word ``issue'' as a euphemism for ``problem.'' When compositions are not specified, separate chemical symbols by en-dashes; for example, ``NiMn'' indicates the intermetallic compound \ce{Ni_{0.5}Mn_{0.5}} whereas ``Ni--Mn'' indicates an alloy of some composition \ce{Ni_{x}Mn_{1-x}}.
-
-Be aware of the different meanings of the homophones ``affect'' (usually a verb) and ``effect'' (usually a noun), ``complement'' and ``compliment,'' ``discreet'' and ``discrete,'' ``principal'' (e.g., ``principal investigator'') and ``principle'' (e.g., ``principle of measurement''). Do not confuse ``imply'' and ``infer.''
-
-Prefixes such as ``non,'' ``sub,'' ``micro,'' ``multi,'' and ``"ultra'' are not independent words; they should be joined to the words they modify, usually without a hyphen. There is no period after the ``et'' in the abbreviation ``et al.'' The abbreviation ``i.e.,'' means ``that is,'' and the abbreviation ``e.g.,'' means ``for example'' (these abbreviations are not italicized).
-
-
-\section{Conclusion}
-A conclusion section is not required, though it is preferred. Although a conclusion may review the main points of the paper, do not replicate the abstract as the conclusion. A conclusion might elaborate on the importance of the work or suggest applications and extensions. \textit{Note that the conclusion section is the last section of the paper that should be numbered. The appendix (if present), acknowledgment, and references should be listed without numbers.}
-
+\paragraph{Conclusion} Our final result is the flutter boundary curve plotted in Figure \ref{fig:case3_boundary}. We can see that the linear regression and logistic regression model has a boundary in form of a line, while the KNN models have boundaries of a complex shape. This is as expected, as KNN is a non-parametric model, while linear regression and logistic regression are parametric models. For both KNN models, we can see that the region with large Mach is predicted poorly. This is due to the lack of data points provided by the dataset. To improve the result even more, we may find or add more data points to the dataset to increase its accuracy, tune the hyperparameter of KNN models, or even use more models, such as tree-based models and boosting algorithm models. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{graph/case3_boundary.png}
+    \caption{Flutter boundary of the regression and classification model in case 3}
+    \label{fig:case3_boundary}
+\end{figure}
 
 \section*{Appendix}
 
 An Appendix, if needed, should appear before the acknowledgments.
 
-\section*{Acknowledgments}
-An Acknowledgments section, if used, \textbf{immediately precedes} the References. Sponsorship information and funding data are included here. The preferred spelling of the word ``acknowledgment'' in American English is without the ``e'' after the ``g.'' Avoid expressions such as ``One of us (S.B.A.) would like to thank\ldots'' Instead, write ``F.~A.~Author thanks\ldots'' Sponsor and financial support acknowledgments are also to be listed in the ``acknowledgments'' section.
+\section*{Task Divisions}
+\begin{table*}[H]
+    \centering
+    \caption{\label{tab:task_division}Task division of the project}
+    \begin{tabular}{ll}
+        \toprule
+        Name & Task \\
+        \midrule
+        \multirow{2}{*}{Hafizh Renanto Akhmad} & Analysis of problem 3 \\
+        & Put all answers together in the report \\
+        \midrule
+        \multirow{2}{*}{Isna Nur Firdausi} & Analysis of problem 1 \\
+        & Model training and evaluation \\
+        \midrule
+        \multirow{2}{*}{Abisatya Hadyan Dhananjaya} & Analysis of problem 2, linear regression part \\
+        & Model training and evaluation \\
+        \midrule
+        \multirow{2}{*}{Rizky Amalis Zhuraida} & Analysis of problem 2, KNN regression part \\
+        & Model training and evaluation \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
 
 \bibliographystyle{new-aiaa}
 \bibliography{reference}
