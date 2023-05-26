@@ -16,6 +16,8 @@
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{float}
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
 
 \title{Utilizing Statistical Learning Algorithm to Solve Problems in Aerospace Engineering}
 
@@ -26,12 +28,10 @@
 
 \maketitle
 
-\begin{abstract}
-\lipsum[1]
-\end{abstract}
-
 \section{Introduction}
-\lettrine{T}{he} 
+\lettrine{A}{erospace} engineering encompasses the design, development, and operation of aircraft and spacecraft systems. Recently, statistical learning algorithms have emerged as powerful tools for solving complex problems in aerospace engineering. Statistical learning is a field of study that focuses on developing algorithms and techniques to extract meaningful insights and patterns from data. It allows aerospace engineers to leverage the wealth of data collected from flight tests, simulations, wind tunnel experiments, and operational databases to gain deeper insights and make informed decisions. Statistical learning algorithms can be categorized into two main types: supervised learning and unsupervised learning. 
+Supervised learning algorithms use labelled data with known outcomes to learn patterns and relationships between input variables and the desired output. Unsupervised learning algorithms use labelled data with unknown outcomes to predict and classify new data points accurately. This report discusses the potential of statistical learning algorithms in aerospace engineering. It discusses various algorithms, their applications, and challenges specific to the aerospace domain. It examines case studies and real-world examples to highlight the effectiveness of statistical learning algorithms in improving performance, optimizing designs, enhancing safety, and enabling data-driven decision-making. By leveraging these algorithms' capabilities, the aerospace industry can push the boundaries of innovation, improve operational efficiency, and drive advancements in aircraft design, operation, and safety.
+
 
 \section{Statistical Learning}
 \subsection{Definition}
@@ -39,7 +39,7 @@ Statistical learning referes to the set approaches or methods to estimate a func
 \begin{equation} \label{eq:statslearndef}
     Y = f(X) + \epsilon
 \end{equation}
-where $\epsilon$ is a random error term, which is independent of $X$ and has mean zero. \texttt{F} represents the systematic information that $X$ provides about $Y$ [1]. Statistical learning is a set of approaches to estimate \texttt{F} based on some given data.
+where $\epsilon$ is a random error term, which is independent of $X$ and has mean zero. \texttt{F} represents the systematic information that $X$ provides about $Y$ \citet{James_2017}. Statistical learning is a set of approaches to estimate \texttt{F} based on some given data.
 
 \paragraph{Regression vs Classification}
 There are two types of problems in statistical learning: regression and classification. In regression problems, the response $Y$ is quantitative, while in classification problems, the response $Y$ is qualitative or categorical.
@@ -247,7 +247,7 @@ The $K$-fold cross-validation works by dividing the training data into $K$ folds
 \subsection{Correlation Coefficient}
 The correlation coefficient is a measure of the linear relationship between two variables. The most common correlation coefficient is the Pearson correlation coefficient, which is defined as
 \begin{equation} \label{eq:pearsoncorr}
-    r_{XY} = \frac{\sum_{i=1}^n \left(X_i - \bar{X}\right)\left(Y_i - \bar{Y}\right)}{\sqrt{\sum_{i=1}^n \left(X_i - \bar{X}\right)^2 \sum_{i=1}^n \left(Y_i - \bar{Y}\right)^2}}
+    r_{XY} = \frac{\sum_{i=1}^n \left(X_i - \mu_{X}\right)\left(Y_i - \mu_{Y}\right)}{\sqrt{\sum_{i=1}^n \left(X_i - \mu_{X}\right)^2 \sum_{i=1}^n \left(Y_i - \mu_{Y}\right)^2}}
 \end{equation}
 where $X_i$ and $Y_i$ are the $i$-th data points of $X$ and $Y$, respectively, $\bar{X}$ and $\bar{Y}$ are the mean of $X$ and $Y$, respectively, and $n$ is the number of data points. The Pearson correlation coefficient is bounded between $-1$ and $1$. A value of $-1$ indicates a perfect negative linear relationship, while a value of $1$ indicates a perfect positive linear relationship. A value of $0$ indicates no linear relationship.
 
@@ -263,11 +263,11 @@ where $n_\textrm{test}$ is the number of data points in the test set, $y_i$ is t
 \end{equation}
 
 \subsubsection{Classification Problem}
-For classification problems, we will use the accuracy, precision, recall, and F1-score as the accuracy metrics.
+For classification problems, we will use the accuracy, precision, recall, and F1-score as the score metrics.
 \begin{enumerate}
 \item \textit{Accuracy} is the most intuitive metric and it is simply a ratio of correctly predicted observation to the total observations. It is defined as
 \begin{equation} \label{eq:accuracy}
-    \textrm{Accuracy} = \frac{\textrm{Number of Correct Predictions}}{\textrm{Total Number of Predictions}} = \frac{\textrm{True Positives} + \textrm{True Negatives}}{\textrm{True Positives} + \textrm{True Negatives} + \textrm{False Positives} + \textrm{False Negatives}}
+    \textrm{Accuracy} = \frac{\textrm{True Positives} + \textrm{True Negatives}}{\textrm{True Positives} + \textrm{True Negatives} + \textrm{False Positives} + \textrm{False Negatives}}
 \end{equation}
 \item \textit{Precision} is the ratio of correctly predicted positive observations to the total predicted positive observations. It is defined as
 \begin{equation} \label{eq:precision}
@@ -287,7 +287,7 @@ F1-score is a good metric to use when we need to seek a balance between precisio
 \end{enumerate}
 \section{Problem Cases}
 \subsection{Case 1: Flapping Plate Thrust}
-We're using the data from \cite{luqman2022thrust} about kinematic of a flapping plate to simulate the fin's movement of a fish on AUV (Autonomous Underwater Vehicle). In the study, the effect of the fin's stiffness and the flapping frequency on thrust production while the AUV is moving forward. The schematic is given in Figure \ref{fig:case1_problem}, here the fin rotates with a maximum angle alpha with a certain flapping frequency. The plate is composed of Acrylic and silicone rubber length attached in tandem. The plate with 0\% and 100\% percentage of acrylic represents the most flexible and the stiffest panel, respectively. The stiffness of the plate is varied by changing the proportion of the Acrylic and the silicone rubber length, in which the effective stiffness of the composite plate can then be calculated. For each proportion of material, the flapping frequency is varied and the thrust is measured using a set of experimental setup comprising a towing tank and a load cell.
+We're using the data from \citet{Fathurrohim_et_al_2022} about kinematic of a flapping plate to simulate the fin's movement of a fish on AUV (Autonomous Underwater Vehicle). In the study, the effect of the fin's stiffness and the flapping frequency on thrust production while the AUV is moving forward. The schematic is given in Figure \ref{fig:case1_problem}, here the fin rotates with a maximum angle alpha with a certain flapping frequency. The plate is composed of Acrylic and silicone rubber length attached in tandem. The plate with 0\% and 100\% percentage of acrylic represents the most flexible and the stiffest panel, respectively. The stiffness of the plate is varied by changing the proportion of the Acrylic and the silicone rubber length, in which the effective stiffness of the composite plate can then be calculated. For each proportion of material, the flapping frequency is varied and the thrust is measured using a set of experimental setup comprising a towing tank and a load cell.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.4\textwidth}
@@ -316,7 +316,8 @@ We may also plot the data in a 3D scatter plot, as shown in Figure \ref{fig:case
     \includegraphics[width=0.5\textwidth]{graph/case1_3d_scatter.png}
     \caption{\label{fig:case1_3d_scatter} 3D scatter plot of the data in case 1}
 \end{figure}
-Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
+
+\paragraph{Train-Test Split} Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
 
 \paragraph{Model Selection}
 Here, we have to predict a continuous value, thus we will use regression models. We will use linear regression and KNN regression.
@@ -375,7 +376,7 @@ We will use the testing set to evaluate the accuracy of the model, using RSME an
 \end{table}
 
 After comparing 2 models we created earlier, we know that RMSE and MAE values of the KNN regression model is lower than the linear regression model. From there, we can conclude that the KNN regression model better describes the approximation relationship between thrust as the output with the frequency and the stiffness as the input variables. 
-Linear regression model does not fit to interpret the data set we process before can be seen from the RSE and $R^2$ score obtained, the $R^2$ score is closer to 0, it shows that data does not fit to the regression line
+Linear regression model does not fit to interpret the data set we process before can be seen from the RSE and $R^2$ score obtained, the $R^2$ score is closer to 0, it shows that data does not fit to the regression line, and the relation between the inputs and thrust is not linear.
 
 \paragraph{Conclusion}
 From the results of calculating the coefficient of the linear regression model and the hypothesis testing in Table \ref{tab:case1_beta_val}, we can see that for $\beta_0$ and $\beta_1$, the hypothesis testing result is to do not reject $H_0$, we can interpret that the coefficients are not significant. While for $\beta_2$ the hypothesis testing result is to reject $H_0$, which means the coefficient is significant. 
@@ -443,7 +444,7 @@ Based on initial inspection, our dataset have a total of 500 entries, and none o
 \end{figure}
 Based on values shown in \ref{fig:case2_corr_heatmap}, the input variables having the strongest correlation with \texttt{CD}, \texttt{CL}, and \texttt{CM} is demonstrated by \texttt{yup}, or the upper crest ordinate.
 
-Before we train the model, as we're going to rank the importance of each parameter, we may scale the data using \texttt{MinMaxScaler} from \texttt{sklearn.preprocessing}. We may also split the data into training and testing set, with the ratio of 80:20, using \texttt{train\_test\_split} from \texttt{sklearn.model\_selection}.
+\paragraph{Train-Test Split}  Before we train the model, as we're going to rank the importance of each parameter, we may scale the data using \texttt{MinMaxScaler} from \texttt{sklearn.preprocessing}. We may also split the data into training and testing set, with the ratio of 80:20, using \texttt{train\_test\_split} from \texttt{sklearn.model\_selection}.
 
 \paragraph{Model Selection}
 Here, we have to predict continuous values, thus we will use regression models. We will use linear regression and KNN regression. 
@@ -531,7 +532,7 @@ Using \eqref{eq:betaval}, we can calculate the value of $\beta$s of \texttt{CD},
     \end{tabular}
 \end{table}
 
-We may now evalute the linear regression model using $R^2$ and $RSE$ score for each aerodynamic coefficients from \ref{tab:case2_r2_rse}.
+We may now evalute the linear regression model using $R^2$ and RSE score for each aerodynamic coefficients from \ref{tab:case2_r2_rse}.
 \begin{enumerate}
     \item \texttt{CD}
     
@@ -614,7 +615,13 @@ Based on the result in Table \ref{tab:case2_model_eval}, we can see that the lin
     \caption{\label{fig:case2_ranking}Ranking of Input Parameters in Case 2}
 \end{figure}
 \subsection{Case 3: Wing Flutter}
-We're using the data from \cite{palar2023kernel} about flutter detection on NACA 64A10 airfoil. The data is retrieved from a numerical experiment which investigates the safety regime of a NACA 64A010 with two degrees of freedom: pitch and plunge motion. The study investigates the impact of two design conditions, namely, the Mach number and the flutter speed. A numerical aerodynamic solver was employed with the Mach number and the flutter speed as inputs, and the damping coefficient as the output.
+We're using the data from \citet{Palar_et_al_2023} about flutter detection on NACA 64A10 airfoil. The data is retrieved from a numerical experiment which investigates the safety regime of a NACA 64A010 with two degrees of freedom: pitch and plunge motion. The study investigates the impact of two design conditions, namely, the Mach number and the flutter speed. A numerical aerodynamic solver was employed with the Mach number and the flutter speed as inputs, and the damping coefficient as the output. The illustration of the airfoil is shown in Figure \ref{fig:case3_airfoil}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{graph/case3_problem.jpg}
+    \caption{\label{fig:case3_airfoil}NACA 64A010 Airfoil}
+\end{figure}
 
 The dataset consist of 300 data points and 3 columns. The columns are the Mach number \texttt{M}, the flutter speed \texttt{Vf}, and the damping coefficient \texttt{DC}. For this problem, we are going predict the occurence of flutter, that is, whether the damping coefficient is positive or negative, given the Mach number and the flutter speed. A negative damping coefficient indicates that the airfoil is unstable and will flutter, and vice versa.
 
@@ -661,7 +668,7 @@ Moreover, as we have only two inputs and an output, we may plot the data in a 3D
 \end{figure}
 From Figure \ref{fig:case3_3d_scatter}, we can see that high Mach number and high flutter speed is dominated by negative damping coefficient, which means that the airfoil will flutter. This is also supported by the correlation coefficient in Table \ref{fig:case3_corr_heatmap}, which shows that the damping coefficient is negatively correlated with both Mach number and flutter speed. From Table \ref{fig:case3_corr_heatmap}, we can see that the Mach number and flutter speed correlation coefficient is very small, which means that they are more likely to be independent with each other. We can also see the correlation between damping coefficient and other variables, which shows that the damping coefficient not quite correlated with the others, but it is more correlated with flutter speed than Mach number.
 
-Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
+\paragraph{Train-Test Split} Before we train the model, we need to split the data into training and testing set. We will use 80\% of the data for training and the rest for testing. The testing set will be used to evaluate the accuracy of the model. We will use \texttt{train\_test\_split} from \texttt{sklearn.model\_selection} to split the data. 
 
 \paragraph{Model Selection}
 Here, we have to predict a categorical value, so it's quite intuitive if we use a classification model. However, the classification of our target/response, \texttt{F}, is based on value of another column, \texttt{DC}, which can be predicted using a regression model. Therefore, we will use two approach in solving this problem:
@@ -754,7 +761,7 @@ After evaluating each model own parameters, we may now evaluate it with the test
         \bottomrule
     \end{tabular}
 \end{table}
-Now, we may train our KNN classification model. Using 10-fold cross-validation, we obtained the best $k$ value of 3, taking F1-score as the scoring method. Figure \ref{fig:case3_knnc_f1} shows the result of the hyperparameter-tuning, and shows that the F1-score is the highest when $k=3$. 
+Now, we may train our KNN classification model. Using 10-fold cross-validation, we obtained the best $k$ value of 3, taking F1-score as the scoring method. This is because the occurence of flutter is very dangerous, a hazard to the wing design, and thus, we want to minimize the false negative rate. Figure \ref{fig:case3_knnc_f1} shows the result of the hyperparameter-tuning, and shows that the F1-score is the highest when $k=3$. 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{graph/case3_knnc_f1.png}
@@ -792,8 +799,7 @@ Now, we may train our KNN classification model. Using 10-fold cross-validation, 
     \end{tabular}
 \end{table}
 
-From the confusion matrix, we can see that both linear and logistic regression model can't handle the false positive case pretty well. Although, linear regression can handle the false negative better than logistic regression. The KNN regression model beat the parametric models quite well. This is shown from Table \ref{tab:case3_classification_report}, where all score metrics of KNN models are larger than those of the parametric models. The KNN regressor has the highest accuracy and F1-score. However, there are still false negative detected. 
-
+From the confusion matrix, we can see that both linear and logistic regression model can't handle the false positive case pretty well. Although, linear regression can handle the false negative better than logistic regression. The KNN algorithm models top the parametric models quite well. This is shown from Table \ref{tab:case3_classification_report}, where all score metrics of KNN models are larger than those of the parametric models. The KNN regressor has the highest accuracy and F1-score, but the KNN classifier has the highest precision in predicting flutter case and the highest recall in predicting non-flutter case.
 \paragraph{Conclusion} Our final result is the flutter boundary curve plotted in Figure \ref{fig:case3_boundary}. We can see that the linear regression and logistic regression model has a boundary in form of a line, while the KNN models have boundaries of a complex shape. This is as expected, as the relation between the inputs and the output are shown to be non-linear, KNN as a non-parametric model should ``catch'' the shape better, than linear regression and logistic regression whcih are parametric models.
 
 For both KNN models, we can see that the region with large Mach is predicted poorly. This is due to the lack of data points provided by the dataset. To improve the result even more, we may find or add more data points to the dataset to increase its accuracy, tune the hyperparameter of KNN models, or even use more models, such as tree-based models and boosting algorithm models. 
@@ -805,31 +811,37 @@ For both KNN models, we can see that the region with large Mach is predicted poo
 \end{figure}
 
 \section*{Appendix}
+\subsection*{Source Code}
+\noindent The source code of this project is available on \url{https://github.com/hafizh-ender/TugasBesarSDS_Kelompok5}.
+
+\subsection*{Presentation Video}
+\noindent The presentation can be accessed on \url{}
+
 \subsection*{Task Division}
-\begin{table*}[p]
+\begin{table*}[h]
     \centering
-    \caption{\label{tab:task_division}Task Division of the Project}
-    \begin{tabular}{ll}
+    \caption{Task Division of the Project}
+    \begin{tabular}[width=1.0\textwidth]{lll}
         \toprule
-        Name & Task \\
+        Name & NIM & Task \\
         \midrule
-        \multirow{3}{*}{Hafizh Renanto Akhmad} & Analysis of problem 3 \\
-        & Write the basic theory of the report \\
-        & Put all answers together in the report \\
+        \multirow{2}{*}{Rizky Amalis Zhuraida} & \multirow{2}{*}{13620071} & Analysis of problem 2, KNN regression part and final conclusion  \\
+        & & (coding, PPT, and video) \\
         \midrule
-        \multirow{2}{*}{Isna Nur Firdausi} & Analysis of problem 1 \\
-        & Model training and evaluation \\
+        \multirow{2}{*}{Abisatya Hadyan Dhananjaya} & \multirow{2}{*}{13621046} & Analysis of problem 2, linear regression part (coding, PPT, and video) \\
+        & & Main video editor \\
         \midrule
-        \multirow{2}{*}{Abisatya Hadyan Dhananjaya} & Analysis of problem 2, linear regression part \\
-        & Model training and evaluation \\
+        \multirow{3}{*}{Hafizh Renanto Akhmad} & \multirow{3}{*}{13621060} & Analysis of problem 3 (coding, PPT, and video) \\
+        & & Write the basic theory of the report \\
+        & & Put all answers together in the report \\
         \midrule
-        \multirow{2}{*}{Rizky Amalis Zhuraida} & Analysis of problem 2, KNN regression part \\
-        & Model training and evaluation \\
+        \multirow{2}{*}{Isna Nur Firdausi} & \multirow{2}{*}{13621078} & Analysis of problem 1 (coding, PPT, and video) \\
+        & & Initiate PPT slide design \\
         \bottomrule
     \end{tabular}
 \end{table*}
 
 \bibliographystyle{new-aiaa}
-\bibliography{reference}
-
+\bibliography{main}
+    
 \end{document}
