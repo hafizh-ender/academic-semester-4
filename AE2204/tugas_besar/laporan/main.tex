@@ -19,7 +19,7 @@
 
 \title{Utilizing Statistical Learning Algorithm to Solve Problems in Aerospace Engineering}
 
-\author{Hafizh Renanto Akhmad\footnote{13621060, Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, Abisatya Hadyan Dhananjaya\footnote{Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, Isna Nur Firdausi\footnote{Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, and Rizky Amalis Zhuraida\footnote{Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}}
+\author{Hafizh Renanto Akhmad\footnote{13621060, Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, Abisatya Hadyan Dhananjaya\footnote{13621046, Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, Isna Nur Firdausi\footnote{13621078, Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}, and Rizky Amalis Zhuraida\footnote{13620071, Undergraduate Student, Faculty of Mechanical and Aerospace Engineering}}
 \affil{Institut Teknologi Bandung, Bandung, Jawa Barat, 40132}
 
 \begin{document}
@@ -29,15 +29,6 @@
 \begin{abstract}
 \lipsum[1]
 \end{abstract}
-
-\section{Nomenclature}
-
-{\renewcommand\arraystretch{1.0}
-\noindent\begin{longtable*}{@{}l @{\quad=\quad} l@{}}
-    \texttt{M} & Mach number\\
-    \texttt{Vf} & Flutter speed\\
-    \texttt{DC} & Damping coefficient
-\end{longtable*}}
 
 \section{Introduction}
 \lettrine{T}{he} 
@@ -262,9 +253,9 @@ where $X_i$ and $Y_i$ are the $i$-th data points of $X$ and $Y$, respectively, $
 
 \subsection{Model Accuracy Metrics}
 \subsubsection{Regression Problem}
-For regression problems, we will use the mean squared error (MSE) and mean absolute error (MAE) as the accuracy metrics. The MSE is defined as
-\begin{equation} \label{eq:mse}
-    \textrm{MSE} = \frac{1}{n_\textrm{test}} \sum_{i=1}^{n_\textrm{test}} \left(y_i - \hat{y}_i\right)^2
+For regression problems, we will use the root mean squared error (RMSE) and mean absolute error (MAE) as the accuracy metrics. The RMSE is defined as
+\begin{equation} \label{eq:rmse}
+    \textrm{RMSE} = \sqrt{\frac{1}{n_\textrm{test}} \sum_{i=1}^{n_\textrm{test}} \left(y_i - \hat{y}_i\right)^2}
 \end{equation}
 where $n_\textrm{test}$ is the number of data points in the test set, $y_i$ is the actual value of the $i$-th data point, and $\hat{y}_i$ is the predicted value of the $i$-th data point. The MAE is defined as
 \begin{equation} \label{eq:mae}
@@ -276,7 +267,7 @@ For classification problems, we will use the accuracy, precision, recall, and F1
 \begin{enumerate}
 \item \textit{Accuracy} is the most intuitive metric and it is simply a ratio of correctly predicted observation to the total observations. It is defined as
 \begin{equation} \label{eq:accuracy}
-    \textrm{Accuracy} = \frac{\textrm{Number of Correct Predictions}}{\textrm{Total Number of Predictions}}
+    \textrm{Accuracy} = \frac{\textrm{Number of Correct Predictions}}{\textrm{Total Number of Predictions}} = \frac{\textrm{True Positives} + \textrm{True Negatives}}{\textrm{True Positives} + \textrm{True Negatives} + \textrm{False Positives} + \textrm{False Negatives}}
 \end{equation}
 \item \textit{Precision} is the ratio of correctly predicted positive observations to the total predicted positive observations. It is defined as
 \begin{equation} \label{eq:precision}
@@ -554,14 +545,78 @@ We may now evalute the linear regression model using $R^2$ and $RSE$ score for e
 \end{enumerate}
 
 \subparagraph{KNN Regression}
-As the data has been scaled, we may continue directly to the model building. We will also conduct a grid search to find the $k$ value for the KNN regression model, using \texttt{GridSearchCV} from \texttt{sklearn.model\_selection}. With 5-fold cross validation, we obta
+As the data has been scaled, we may continue directly to the model building. We will also conduct a grid search to find the $k$ value for the KNN regression model, using \texttt{GridSearchCV} from \texttt{sklearn.model\_selection}. With 5-fold cross validation, we obtain that the best $k$ for \texttt{CD}, \texttt{CL}, and \texttt{CM} are 5, 7, and 6, respectively, as shown on Figure \ref{fig:case2_knn_gridsearch}. We will then use these $k$ values to build the KNN regression model.
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_knnr_rmse_cd.png}
+        \caption{\label{fig:case2_knn_cd_gridsearch}Grid Search for KNN Regression in Case 2 for \texttt{CD}}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_knnr_rmse_cl.png}
+        \caption{\label{fig:case2_knn_cl_gridsearch}Grid Search for KNN Regression in Case 2 for \texttt{CL}}
+    \end{subfigure}
+    \vskip\baselineskip
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_knnr_rmse_cm.png}
+        \caption{\label{fig:case2_knn_cm_gridsearch}Grid Search for KNN Regression in Case 2 for \texttt{CM}}
+    \end{subfigure}
+    
+    \caption{\label{fig:case2_knn_gridsearch}Grid Search for KNN Regression in Case 2}
+\end{figure}
 
 \subparagraph{Model Evaluation}
+We will use the testing set to evaluate the accuracy of the model, using RSME and MAE value. The result is shown in Table \ref{tab:case2_model_eval}.
+\begin{table}[H]
+    \centering
+    \caption{\label{tab:case2_model_eval}Model Evaluation for KNN Regression in Case 2}
+    \begin{tabular}[width=1.0\textwidth]{lcccccc}
+        \toprule
+        Coefficient & \multicolumn{2}{c}{\texttt{CD}}  & \multicolumn{2}{c}{\texttt{CL}} & \multicolumn{2}{c}{\texttt{CM}} \\
+        \midrule
+        Metric & RSME & MAE & RSME & MAE & RSME & MAE \\
+        \midrule
+        Linear Regression & 0.003120 & 0.002393 & 0.018990 & 0.013370 & 0.014865 & 0.005039 \\
+        KNN Regression & 0.003514 & 0.003560 & 0.049321 & 0.039919 & 0.014645 & 0.011996 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \paragraph{Conclusion}
+Based on the result in Table \ref{tab:case2_model_eval}, we can see that the linear regression model has less RMSE and MAE value for all aerodynamic coefficients. Therefore, we can conclude that the linear regression model is better than the KNN regression model for this case. This concludes that the relation between the aerodynamic coefficients and the input parameters is linear, which is also supported by the $R^2$ score. From here, we may rank the input parameters based on their importance to the aerodynamic coefficients, which is based on the magnitude of the coefficient of the linear regression model. The illustration of the ranking is shown in Figure \ref{fig:case2_ranking}. We can see that \texttt{yup} is the most important input parameters for all aerodynamic coefficients. This is also supported by the fact the correlation coefficient between \texttt{yup} and the aerodynamic coefficients are the highest among all input parameters. On the other hand, we can see that \texttt{beta\_te} is the least important input parameters for all aerodynamic coefficients. This is also supported by the fact for all hypothesis testing regarding the coefficient of \texttt{beta\_te}, the result is always to not reject the null hypothesis, which means that the coefficient is not significant, and thus making it also insignificant in the linear regression model.
 
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_cd_coef_rank.png}
+        \caption{\label{fig:case2_ranking_cd}Ranking of Input Parameters for \texttt{CD}}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_cl_coef_rank.png}
+        \caption{\label{fig:case2_ranking_cl}Ranking of Input Parameters for \texttt{CL}}
+    \end{subfigure}
+    \vskip\baselineskip
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{graph/case2_cm_coef_rank.png}
+        \caption{\label{fig:case2_ranking_cm}Ranking of Input Parameters for \texttt{CM}}
+    \end{subfigure}
+
+    \caption{\label{fig:case2_ranking}Ranking of Input Parameters in Case 2}
+\end{figure}
 \subsection{Case 3: Wing Flutter}
-We're using the data from \cite{palar2023kernel} about flutter detection on NACA 64A10 airfoil. The dataset consist of 300 data points and 3 columns. The columns are the Mach number \texttt{M}, the flutter speed \texttt{Vf}, and the damping coefficient \texttt{DC}. For this problem, we are going predict the occurence of flutter, that is, whether the damping coefficient is positive or negative, given the Mach number and the flutter speed. A negative damping coefficient indicates that the airfoil is unstable and will flutter, and vice versa.
+We're using the data from \cite{palar2023kernel} about flutter detection on NACA 64A10 airfoil. The data is retrieved from a numerical experiment which investigates the safety regime of a NACA 64A010 with two degrees of freedom: pitch and plunge motion. The study investigates the impact of two design conditions, namely, the Mach number and the flutter speed. A numerical aerodynamic solver was employed with the Mach number and the flutter speed as inputs, and the damping coefficient as the output.
+
+The dataset consist of 300 data points and 3 columns. The columns are the Mach number \texttt{M}, the flutter speed \texttt{Vf}, and the damping coefficient \texttt{DC}. For this problem, we are going predict the occurence of flutter, that is, whether the damping coefficient is positive or negative, given the Mach number and the flutter speed. A negative damping coefficient indicates that the airfoil is unstable and will flutter, and vice versa.
 
 \paragraph{Data Inspection and Preprocessing}
 Based on initial inspection, our dataset have a total of 300 entries, and none of them are null. Moreover, all of the columns are numerical, with general information stored in Table \ref{tab:case3_data_info}. 
@@ -707,17 +762,17 @@ Now, we may train our KNN classification model. Using 10-fold cross-validation, 
     \label{fig:case3_knnc_f1}
 \end{figure}
 
-\subparagraph{Model Evaluation} As we're dealing with a classification problem, we will use the scores of \eqref{eq:accuracy}, \eqref{eq:precision}, \eqref{eq:recall}, and \eqref{eq:f1score} to evaluate the model. The scores is calculated using \texttt{classification\_report} from \texttt{sklearn.metrics}. We will also provide the confusion matrix heatmap of the model to visualize more which how many data in each class is predicted right or wrong by the models. The result of the evaluation is shown in Table \ref{tab:case3_classification_report} and Figure \ref{fig:case3_confusion}.
+\subparagraph{Comparing All Models} As we're dealing with a classification problem, we will use the scores of \eqref{eq:accuracy}, \eqref{eq:precision}, \eqref{eq:recall}, and \eqref{eq:f1score} to evaluate the model. For regression models, we will first classify the predicted value. The scores is calculated using \texttt{classification\_report} from \texttt{sklearn.metrics}. We will also provide the confusion matrix heatmap of the model to visualize more which how many data in each class is predicted right or wrong by the models. The result of the evaluation is shown in Table \ref{tab:case3_classification_report} and Figure \ref{fig:case3_confusion}. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{graph/case3_confusion.png}
-    \caption{Confusion matrix heatmap of the regression and classification model in case 3}
+    \caption{Confusion matrix heatmap of the regression and classification model in case 3, done on the testing data}
     \label{fig:case3_confusion}
 \end{figure}
 
 \begin{table}[H]
     \centering
-    \caption{\label{tab:case3_classification_report}Classification report of the regression and classification model in case 3}
+    \caption{\label{tab:case3_classification_report}Classification report of the regression and classification model in case 3, done on the testing data}
     \begin{tabular}{llrrrr}
         \toprule
         Model                               & Class         &  Precision    &  Recall       &  F1-score     & Accuracy \\
@@ -736,9 +791,12 @@ Now, we may train our KNN classification model. Using 10-fold cross-validation, 
         \bottomrule
     \end{tabular}
 \end{table}
-We can see that logistic regression model has the lowest accuracy, precision, recall, and F1-score. 
 
-\paragraph{Conclusion} Our final result is the flutter boundary curve plotted in Figure \ref{fig:case3_boundary}. We can see that the linear regression and logistic regression model has a boundary in form of a line, while the KNN models have boundaries of a complex shape. This is as expected, as KNN is a non-parametric model, while linear regression and logistic regression are parametric models. For both KNN models, we can see that the region with large Mach is predicted poorly. This is due to the lack of data points provided by the dataset. To improve the result even more, we may find or add more data points to the dataset to increase its accuracy, tune the hyperparameter of KNN models, or even use more models, such as tree-based models and boosting algorithm models. 
+From the confusion matrix, we can see that both linear and logistic regression model can't handle the false positive case pretty well. Although, linear regression can handle the false negative better than logistic regression. The KNN regression model beat the parametric models quite well. This is shown from Table \ref{tab:case3_classification_report}, where all score metrics of KNN models are larger than those of the parametric models. The KNN regressor has the highest accuracy and F1-score. However, there are still false negative detected. 
+
+\paragraph{Conclusion} Our final result is the flutter boundary curve plotted in Figure \ref{fig:case3_boundary}. We can see that the linear regression and logistic regression model has a boundary in form of a line, while the KNN models have boundaries of a complex shape. This is as expected, as the relation between the inputs and the output are shown to be non-linear, KNN as a non-parametric model should ``catch'' the shape better, than linear regression and logistic regression whcih are parametric models.
+
+For both KNN models, we can see that the region with large Mach is predicted poorly. This is due to the lack of data points provided by the dataset. To improve the result even more, we may find or add more data points to the dataset to increase its accuracy, tune the hyperparameter of KNN models, or even use more models, such as tree-based models and boosting algorithm models. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{graph/case3_boundary.png}
@@ -747,18 +805,16 @@ We can see that logistic regression model has the lowest accuracy, precision, re
 \end{figure}
 
 \section*{Appendix}
-
-An Appendix, if needed, should appear before the acknowledgments.
-
-\section*{Task Divisions}
-\begin{table*}[H]
+\subsection*{Task Division}
+\begin{table*}[p]
     \centering
-    \caption{\label{tab:task_division}Task division of the project}
+    \caption{\label{tab:task_division}Task Division of the Project}
     \begin{tabular}{ll}
         \toprule
         Name & Task \\
         \midrule
-        \multirow{2}{*}{Hafizh Renanto Akhmad} & Analysis of problem 3 \\
+        \multirow{3}{*}{Hafizh Renanto Akhmad} & Analysis of problem 3 \\
+        & Write the basic theory of the report \\
         & Put all answers together in the report \\
         \midrule
         \multirow{2}{*}{Isna Nur Firdausi} & Analysis of problem 1 \\
